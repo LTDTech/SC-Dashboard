@@ -1,0 +1,8 @@
+1. Landing Page
+  a. user enters Soundcloud user name and email address
+2. Instant Insights page
+  a. geo visualization of where followers are located and the ability to export a list of all their soundcloud followers
+3. Dashboard Page
+  a. users can log back into to check how many new followers and plays they've obtained
+  b. should be able to see changes in the heat map and visualize changes from the last time they've checked
+  c. tracks listeners gained and lost and followers gained and lost 
