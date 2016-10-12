@@ -21450,30 +21450,40 @@
 	      { className: 'mainDiv' },
 	      React.createElement(
 	        'nav',
-	        { className: 'navbar navbar-default' },
+	        { className: 'navbar navbar-default topNav' },
 	        React.createElement(
 	          'div',
-	          { className: 'container-fluid nav-stacked' },
+	          { className: 'navbar-header topNavLeft' },
 	          React.createElement(
-	            'div',
-	            { className: 'navbar-header' },
+	            'button',
+	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
 	            React.createElement(
-	              'button',
-	              { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
-	              React.createElement(
-	                'span',
-	                { className: 'sr-only' },
-	                'Toggle navigation'
-	              ),
-	              React.createElement('span', { className: 'icon-bar' }),
-	              React.createElement('span', { className: 'icon-bar' }),
-	              React.createElement('span', { className: 'icon-bar' })
+	              'span',
+	              { className: 'sr-only' },
+	              'Toggle navigation'
 	            ),
-	            React.createElement(
-	              'a',
-	              { className: 'navbar-brand', href: '#' },
-	              'Wysidio'
-	            )
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' })
+	          ),
+	          React.createElement(
+	            'a',
+	            { className: 'navbar-brand', href: '#' },
+	            'Wysidio'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'topNavRight' },
+	          React.createElement(
+	            'a',
+	            { className: 'navbar-brand', href: '#' },
+	            'Sign Up'
+	          ),
+	          React.createElement(
+	            'a',
+	            { className: 'navbar-brand', href: '#' },
+	            'Login'
 	          )
 	        )
 	      ),
@@ -21491,42 +21501,38 @@
 	              { className: 'navbar navbar-default' },
 	              React.createElement(
 	                'div',
-	                { className: 'container-fluid' },
+	                { className: 'container-fluid leftNav' },
 	                React.createElement(
-	                  'div',
-	                  { className: 'navbar-header' },
+	                  'button',
+	                  { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
 	                  React.createElement(
-	                    'button',
-	                    { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
-	                    React.createElement(
-	                      'span',
-	                      { className: 'sr-only' },
-	                      'Toggle navigation'
-	                    ),
-	                    React.createElement('span', { className: 'icon-bar' }),
-	                    React.createElement('span', { className: 'icon-bar' }),
-	                    React.createElement('span', { className: 'icon-bar' })
+	                    'span',
+	                    { className: 'sr-only' },
+	                    'Toggle navigation'
 	                  ),
-	                  React.createElement(
-	                    'a',
-	                    { className: 'navbar-brand nav nav-tabs nav-stacked', href: '#' },
-	                    'Insights'
-	                  ),
-	                  React.createElement(
-	                    'a',
-	                    { className: 'navbar-brand nav nav-tabs nav-stacked', href: '#' },
-	                    'Brand Traction'
-	                  ),
-	                  React.createElement(
-	                    'a',
-	                    { className: 'navbar-brand nav nav-tabs nav-stacked', href: '#' },
-	                    'Brand'
-	                  ),
-	                  React.createElement(
-	                    'a',
-	                    { className: 'navbar-brand nav nav-tabs nav-stacked', href: '#' },
-	                    'Brand'
-	                  )
+	                  React.createElement('span', { className: 'icon-bar' }),
+	                  React.createElement('span', { className: 'icon-bar' }),
+	                  React.createElement('span', { className: 'icon-bar' })
+	                ),
+	                React.createElement(
+	                  'a',
+	                  { className: 'navbar-brand nav nav-tabs nav-stacked', href: '#' },
+	                  'Dashboard'
+	                ),
+	                React.createElement(
+	                  'a',
+	                  { className: 'navbar-brand nav nav-tabs nav-stacked', href: '#' },
+	                  'Login/Signup'
+	                ),
+	                React.createElement(
+	                  'a',
+	                  { className: 'navbar-brand nav nav-tabs nav-stacked', href: '#' },
+	                  'Insights'
+	                ),
+	                React.createElement(
+	                  'a',
+	                  { className: 'navbar-brand nav nav-tabs nav-stacked', href: '#' },
+	                  'Brand'
 	                )
 	              )
 	            )
@@ -21536,7 +21542,7 @@
 	            { className: 'col-sm-10' },
 	            React.createElement(
 	              'div',
-	              { className: 'dashText' },
+	              { className: 'dashHeader' },
 	              React.createElement(
 	                'h1',
 	                null,
