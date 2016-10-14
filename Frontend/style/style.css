@@ -141,13 +141,24 @@ h1 {
 }
 .topNavLeft {
   align-items: flex-start;
+  float: left;
 }
 .topNavRight {
   align-items: flex-end;
+  float: right;
 }
 /*.navbar-header {
   display: flex;
 }*/
 .container-fluid-top {
 
+}
+.logo {
+  width: 60px;
+  height: 60  px;
+  margin-top: 0;
+  padding: 0;
+}
+.hover {
+  cursor: pointer;
 }
