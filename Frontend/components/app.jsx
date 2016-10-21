@@ -6,6 +6,7 @@ var React = require('react'),
   hashHistory = require('react-router').hashHistory,
   ReactDOM = require('react-dom'),
   NavBar = require('./navbar'),
+  Footer = require('./footer'),
   SideNavBar = require('./sideNav');
 
 var App = React.createClass({
@@ -25,16 +26,17 @@ var App = React.createClass({
     return (
       <div className="mainDiv">
         <NavBar/>
-        <div className="belowMain">
+
           <div className="row">
             <div className="col-sm-2">
               <SideNavBar/>
             </div>
-              <div className="col-sm-10">
-                {this.props.children}
-              </div>
+            <div className="col-sm-10">
+              {this.props.children}
+            </div>
           </div>
-        </div>
+        
+        <Footer/>
       </div>
     );
   }

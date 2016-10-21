@@ -9,7 +9,7 @@ var ScDash = React.createClass({
     },
   render: function(){
     return (
-      <div className="mainDiv">
+      <div className="mainScDiv">
         <div className="dashHeader">
           <h1>Dashboard</h1>
         </div>

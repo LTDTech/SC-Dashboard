@@ -1,0 +1,84 @@
+.topNav {
+  background-color: black;
+  display: flex;
+  height: 50px;
+  border: 0;
+}
+.topNavLeft {
+  align-items: flex-start;
+  float: left;
+}
+.topNavRight {
+  align-items: flex-end;
+  float: right;
+  justify-content: flex-end;
+  height: 48px;
+  width: 60px
+  border: none;
+}
+.leftNav {
+  display: flex;
+	flex-direction: column;
+  padding-right: 0;
+}
+.sidebar-nav .navbar .navbar-collapse {
+    padding: 0;
+  }
+.sidebar-nav .navbar {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  float: none;
+  display: block;
+  height: 100vh;
+  border: 1px solid;
+}
+.row {
+  height: 100vh;
+}
+.navbar-default {
+  margin-bottom: 0px;
+}
+
+.nav-tabs {
+  float: left;
+}
+.nav-stacked {
+  padding-right: 0;
+}
+.userPro {
+  height: 30px;
+  width: 30px;
+  float: right;
+  justify-content: center;
+}
+.navButton {
+  background-color: black;
+  border: none;
+  float: right;
+}
+.btn-group {
+  float: right;
+  width: 60px;
+  height: 48px
+}
+.dropdown-toggle {
+  height: 48px;
+  width: 60px;
+}
+.button .btn .btn-default .dropdown-toggle .navButton {
+  height: 46px;
+  width: 40px;
+  background-color: black;
+}
+.footer {
+  width: 100%;
+  position: absolute;
+  background-color: black;
+  color: black;
+}
+.mainDiv {
+  width: 100%;
+  height: 100vh;
+  background-size: cover;
+  padding-right: 0;
+}

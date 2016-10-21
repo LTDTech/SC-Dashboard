@@ -48,10 +48,10 @@
 	    ReactDOM = __webpack_require__(34),
 	    ReactDOM = __webpack_require__(34);
 	
-	var Insights = __webpack_require__(240),
-	    LandingPage = __webpack_require__(237),
-	    App = __webpack_require__(239),
-	    ScDash = __webpack_require__(172);
+	var Insights = __webpack_require__(172),
+	    LandingPage = __webpack_require__(236),
+	    App = __webpack_require__(237),
+	    ScDash = __webpack_require__(238);
 	// import { CLIENT_ID, REDIRECT_URI } from './constants/auth';
 	
 	Router;
@@ -21449,33 +21449,29 @@
 
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    LandingPage = __webpack_require__(237);
+	    hashHistory = __webpack_require__(173).hashHistory;
 	
-	var ScDash = React.createClass({
-	  displayName: 'ScDash',
+	var Insights = React.createClass({
+	  displayName: 'Insights',
 	
-	  getInitialState: function () {
-	    return { loggedIn: false };
-	  },
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'mainDiv' },
+	      null,
 	      React.createElement(
 	        'div',
-	        { className: 'dashHeader' },
+	        { className: 'mainIns' },
 	        React.createElement(
 	          'h1',
 	          null,
-	          'Dashboard'
+	          'Insights'
 	        )
 	      )
 	    );
 	  }
 	});
 	
-	module.exports = ScDash;
+	module.exports = Insights;
 
 /***/ },
 /* 173 */
@@ -27133,6 +27129,143 @@
 /* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory;
+	
+	var LandingPage = React.createClass({
+	  displayName: 'LandingPage',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'div',
+	        { className: 'mainLand' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Landing Page'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'scLogin' },
+	          React.createElement(
+	            'button',
+	            { className: 'scButton' },
+	            React.createElement(
+	              'div',
+	              { className: 'scButton2' },
+	              React.createElement(
+	                'div',
+	                { className: 'scButton3' },
+	                'GET STARTED'
+	              ),
+	              React.createElement('img', { className: 'scIcon scButton3', src: '../img/scicon3.jpg' })
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = LandingPage;
+
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ScDash = __webpack_require__(238),
+	    LandingPage = __webpack_require__(236),
+	    Insights = __webpack_require__(172),
+	    Login = __webpack_require__(239),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    ReactDOM = __webpack_require__(34),
+	    NavBar = __webpack_require__(240),
+	    Footer = __webpack_require__(242),
+	    SideNavBar = __webpack_require__(241);
+	
+	var App = React.createClass({
+	  displayName: 'App',
+	
+	  getInitialState: function () {
+	    return { loggedIn: false };
+	  },
+	  insightsClick: function () {
+	    console.log("going to insights");
+	    hashHistory.push('/insights');
+	  },
+	  dashboardClick: function () {
+	    console.log("going to dashboard");
+	    hashHistory.push('/dashboard');
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'mainDiv' },
+	      React.createElement(NavBar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'row' },
+	        React.createElement(
+	          'div',
+	          { className: 'col-sm-2' },
+	          React.createElement(SideNavBar, null)
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'col-sm-10' },
+	          this.props.children
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = App;
+
+/***/ },
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    LandingPage = __webpack_require__(236);
+	
+	var ScDash = React.createClass({
+	  displayName: 'ScDash',
+	
+	  getInitialState: function () {
+	    return { loggedIn: false };
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'mainScDiv' },
+	      React.createElement(
+	        'div',
+	        { className: 'dashHeader' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Dashboard'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = ScDash;
+
+/***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var React = __webpack_require__(1);
 	
 	var LoginWindow = React.createClass({
@@ -27200,131 +27333,13 @@
 	module.exports = LoginWindow;
 
 /***/ },
-/* 237 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory;
-	
-	var LandingPage = React.createClass({
-	  displayName: 'LandingPage',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { className: 'mainLand' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Landing Page'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = LandingPage;
-
-/***/ },
-/* 238 */,
-/* 239 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ScDash = __webpack_require__(172),
-	    LandingPage = __webpack_require__(237),
-	    Insights = __webpack_require__(240),
-	    Login = __webpack_require__(236),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    ReactDOM = __webpack_require__(34),
-	    NavBar = __webpack_require__(241),
-	    SideNavBar = __webpack_require__(242);
-	
-	var App = React.createClass({
-	  displayName: 'App',
-	
-	  getInitialState: function () {
-	    return { loggedIn: false };
-	  },
-	  insightsClick: function () {
-	    console.log("going to insights");
-	    hashHistory.push('/insights');
-	  },
-	  dashboardClick: function () {
-	    console.log("going to dashboard");
-	    hashHistory.push('/dashboard');
-	  },
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'mainDiv' },
-	      React.createElement(NavBar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'belowMain' },
-	        React.createElement(
-	          'div',
-	          { className: 'row' },
-	          React.createElement(
-	            'div',
-	            { className: 'col-sm-2' },
-	            React.createElement(SideNavBar, null)
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'col-sm-10' },
-	            this.props.children
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = App;
-
-/***/ },
 /* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory;
-	
-	var Insights = React.createClass({
-	  displayName: 'Insights',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      null,
-	      React.createElement(
-	        'div',
-	        { className: 'mainIns' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Insights'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = Insights;
-
-/***/ },
-/* 241 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
 	    hashHistory = __webpack_require__(173).hashHistory,
-	    LandingPage = __webpack_require__(237);
+	    LandingPage = __webpack_require__(236);
 	
 	var NavBar = React.createClass({
 	  displayName: 'NavBar',
@@ -27364,14 +27379,45 @@
 	          'div',
 	          { className: 'topNavRight' },
 	          React.createElement(
-	            'a',
-	            { className: 'navbar-brand', href: '#' },
-	            'Sign Up'
-	          ),
-	          React.createElement(
-	            'a',
-	            { className: 'navbar-brand', href: '#' },
-	            'Login'
+	            'div',
+	            { className: 'btn-group navButton' },
+	            React.createElement(
+	              'button',
+	              { type: 'button', className: 'navButton btn btn-default dropdown-toggle', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
+	              React.createElement('img', { className: 'userPro navButton', src: '../img/userprofilepic.jpg' }),
+	              React.createElement('span', { className: 'caret' })
+	            ),
+	            React.createElement(
+	              'ul',
+	              { className: 'dropdown-menu' },
+	              React.createElement(
+	                'li',
+	                null,
+	                React.createElement(
+	                  'a',
+	                  { href: '#' },
+	                  'Login'
+	                )
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                React.createElement(
+	                  'a',
+	                  { href: '#' },
+	                  'Sign Up'
+	                )
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                React.createElement(
+	                  'a',
+	                  { href: '#' },
+	                  'Profile'
+	                )
+	              )
+	            )
 	          )
 	        )
 	      )
@@ -27382,13 +27428,13 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 242 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(34),
 	    hashHistory = __webpack_require__(173).hashHistory,
-	    LandingPage = __webpack_require__(237);
+	    LandingPage = __webpack_require__(236);
 	
 	var SideNavBar = React.createClass({
 	  displayName: 'SideNavBar',
@@ -27448,6 +27494,56 @@
 	});
 	
 	module.exports = SideNavBar;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    LandingPage = __webpack_require__(236);
+	
+	var Footer = React.createClass({
+	  displayName: 'Footer',
+	
+	  getInitialState: function () {
+	    return { loggedIn: false };
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'footer' },
+	      React.createElement(
+	        'nav',
+	        { className: 'navbar navbar-default topNav' },
+	        React.createElement(
+	          'div',
+	          { className: 'navbar-header topNavLeft' },
+	          React.createElement(
+	            'button',
+	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
+	            React.createElement(
+	              'span',
+	              { className: 'sr-only' },
+	              'Toggle navigation'
+	            ),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' })
+	          ),
+	          React.createElement(
+	            'a',
+	            { className: 'logo', href: '/index.html' },
+	            React.createElement('img', { className: 'logo', src: '../img/wysidio.jpg' })
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Footer;
 
 /***/ }
 /******/ ]);

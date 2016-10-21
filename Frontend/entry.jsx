@@ -2,10 +2,10 @@ var React = require('react'),
   ReactDOM = require('react-dom'),
   ReactDOM = require('react-dom');
 
-var Insights = require('./insights'),
-  LandingPage = require('./landing-page'),
-  App = require('./app'),
-  ScDash = require('./ScDash');
+var Insights = require('./components/insights'),
+  LandingPage = require('./components/landing-page'),
+  App = require('./components/app'),
+  ScDash = require('./components/ScDash');
 // import { CLIENT_ID, REDIRECT_URI } from './constants/auth';
 
   Router
