@@ -1,13 +1,17 @@
-getUserData: function(data) {
+var ServerAction = require('../actions/serverAction.js');
+
+module.exports = {
+  getUserData: function(data) {
     $.ajax({
-      url: 'http://52.37.234.149/sc/test/username',
-      method: 'POST',
-      data: insideoutpresents,
+      url: 'http://sc.wysidio.com/sc/get/fiftyfollowers/insideoutpresents',
+      method: 'GET',
       success: function(returnUser) {
-        console.log(data);
+        console.log(returnUser);
+        ServerAction.receivedUsers(returnUser);
       },
       error: function(error) {
         console.log("this was an error");
       }
     });
-  },
+  }
+};

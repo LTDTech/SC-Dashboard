@@ -1,10 +1,9 @@
-var SessionApi = require('../util/sessionApi'),
-    Dispatcher = require('../dispatcher/dispatcher'),
-    UserApi = require('../util/userApi');
+var Dispatcher = require('../dispatcher/dispatcher.js'),
+    UserApi = require('../util/userApi.js');
 
 
 module.exports = {
-  getUserData: function (user) {
+  getUserData: function(user) {
       UserApi.getUserData(user);
    }
 };

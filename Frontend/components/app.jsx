@@ -26,7 +26,6 @@ var App = React.createClass({
     return (
       <div className="mainDiv">
         <NavBar/>
-
           <div className="row">
             <div className="col-sm-2">
               <SideNavBar/>
@@ -35,7 +34,6 @@ var App = React.createClass({
               {this.props.children}
             </div>
           </div>
-        
         <Footer/>
       </div>
     );

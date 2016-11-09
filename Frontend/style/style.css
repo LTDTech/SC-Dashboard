@@ -110,6 +110,12 @@ h1 {
   border-radius: 50px;
   background: linear-gradient(to left, #FF6A00 , #FF3600);
   background-color: #FF3900;
+  justify-content: center;
+  align-items: center;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 150px;
+  margin-bottom: auto;
 }
 .scIcon {
   width: 50px;
@@ -119,6 +125,7 @@ h1 {
   margin: auto;
   height: 600px;
   width: 600px;
+  display: flex;
 }
 /*.scButton2 {
   display: flex;
