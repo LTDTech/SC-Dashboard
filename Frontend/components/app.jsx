@@ -26,14 +26,14 @@ var App = React.createClass({
     return (
       <div className="mainDiv">
         <NavBar/>
-          <div className="row">
-            <div className="col-sm-2">
-              <SideNavBar/>
-            </div>
-            <div className="col-sm-10">
-              {this.props.children}
-            </div>
+        <div className="row">
+          <div className="col-sm-2">
+            <SideNavBar/>
           </div>
+          <div className="col-sm-10">
+            {this.props.children}
+          </div>
+        </div>
         <Footer/>
       </div>
     );

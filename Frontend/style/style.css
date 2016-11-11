@@ -102,36 +102,3 @@ h1 {
 .hover {
   cursor: pointer;
 }
-.scButton {
-  height: 100px;
-  width: 250px;
-  max-width: 500px;
-  max-height: 500px;
-  border-radius: 50px;
-  background: linear-gradient(to left, #FF6A00 , #FF3600);
-  background-color: #FF3900;
-  justify-content: center;
-  align-items: center;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 150px;
-  margin-bottom: auto;
-}
-.scIcon {
-  width: 50px;
-  height: 40px;
-}
-.scLogin {
-  margin: auto;
-  height: 600px;
-  width: 600px;
-  display: flex;
-}
-/*.scButton2 {
-  display: flex;
-}*/
-.scButton3 {
-  justify-content: center;
-  color: white;
-  font-size: 30px;
-}

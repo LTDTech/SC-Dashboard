@@ -10,15 +10,12 @@ var Footer = React.createClass({
   render: function(){
     return (
       <div className="footer">
-        <nav className="navbar navbar-default topNav">
+        <nav className="navbar navbar-default bottom-Nav">
           <div className="navbar-header topNavLeft">
-              <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span className="sr-only">Toggle navigation</span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-              </button>
-              <a className="logo" href="/index.html"><img className="logo" src='../img/wysidio.jpg'></img></a>
+            <div className="footer-logo-div">
+              <img className="footer-logo" src='../img/wysidio.jpg'>
+              </img>
+            </div>
           </div>
         </nav>
       </div>

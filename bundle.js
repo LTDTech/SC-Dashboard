@@ -27132,6 +27132,7 @@
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(34),
 	    ClientAction = __webpack_require__(237),
+	    Footer = __webpack_require__(248),
 	    hashHistory = __webpack_require__(173).hashHistory;
 	
 	var LandingPage = React.createClass({
@@ -27149,11 +27150,6 @@
 	        'div',
 	        { className: 'mainLand' },
 	        React.createElement(
-	          'h1',
-	          null,
-	          'Landing Page'
-	        ),
-	        React.createElement(
 	          'div',
 	          { className: 'scLogin' },
 	          React.createElement(
@@ -27162,12 +27158,12 @@
 	            React.createElement(
 	              'div',
 	              { className: 'scButton2' },
+	              React.createElement('img', { className: 'scIcon scButton3', src: '../img/scicon4.png' }),
 	              React.createElement(
-	                'div',
-	                { className: 'scButton3' },
-	                'GET STARTED'
-	              ),
-	              React.createElement('img', { className: 'scIcon scButton3', src: '../img/scicon3.jpg' })
+	                'h3',
+	                { className: 'get-started' },
+	                'Get Started'
+	              )
 	            )
 	          )
 	        )
@@ -27626,7 +27622,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      { className: 'mainScDiv' },
+	      { className: 'main-Sc-Div' },
 	      React.createElement(
 	        'div',
 	        { className: 'dashHeader' },
@@ -27635,7 +27631,8 @@
 	          null,
 	          'Dashboard'
 	        )
-	      )
+	      ),
+	      React.createElement('div', { className: 'dash-content' })
 	    );
 	  }
 	});
@@ -27828,26 +27825,14 @@
 	      { className: 'footer' },
 	      React.createElement(
 	        'nav',
-	        { className: 'navbar navbar-default topNav' },
+	        { className: 'navbar navbar-default bottom-Nav' },
 	        React.createElement(
 	          'div',
 	          { className: 'navbar-header topNavLeft' },
 	          React.createElement(
-	            'button',
-	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
-	            React.createElement(
-	              'span',
-	              { className: 'sr-only' },
-	              'Toggle navigation'
-	            ),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' })
-	          ),
-	          React.createElement(
-	            'a',
-	            { className: 'logo', href: '/index.html' },
-	            React.createElement('img', { className: 'logo', src: '../img/wysidio.jpg' })
+	            'div',
+	            { className: 'footer-logo-div' },
+	            React.createElement('img', { className: 'footer-logo', src: '../img/wysidio.jpg' })
 	          )
 	        )
 	      )
