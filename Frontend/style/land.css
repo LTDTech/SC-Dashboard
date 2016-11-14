@@ -1,14 +1,17 @@
 .mainLand {
   height: 100vh;
   width: 100%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
 }
 .land-header {
   text-align: center;
   margin-top: 20px;
 }
-
+/*Begin Soundcloud Login*/
 .scButton {
-  height: 100px;
+  height: 60px;
   width: 300px;
   max-width: 500px;
   max-height: 500px;
@@ -18,7 +21,7 @@
   align-items: center;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 300px;
+  margin-top: 20px;
   margin-bottom: auto;
   background-size: cover;
   background-repeat: no-repeat;
@@ -27,10 +30,16 @@
   height: 50px;
 }
 .scLogin {
-  margin: auto;
-  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
+  margin-top: auto;
+  height: 90%;
   width: 100%;
   display: flex;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
 }
 .scButton2 {
   display: flex;
@@ -39,9 +48,62 @@
   justify-content: center;
   color: white;
   font-size: 30px;
+  border-radius: 20px;
 }
 .get-started {
   margin-top: 10px;
   margin-bottom: 10px;
   color: white;
+}
+.sc-name-input {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  flex-direction: column;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  height: 500%;
+}
+.sc-name-form {
+  justify-content: center;
+  margin-top: 530px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  min-width: 300px;
+}
+/*End Soundcloud Login*/
+
+.login-contents {
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+}
+.land-logo {
+  max-height: 90%;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.formbox {
+  margin-left: auto;
+}
+.form-textbox {
+  margin-left: auto;
+  margin-right: auto;
+  width: 250px;
+  display: inline-block;
+  font-weight: 100;
+  font-size: 20px;
+  line-height: 20px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  display: block;
 }

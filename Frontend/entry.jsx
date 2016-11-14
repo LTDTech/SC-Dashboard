@@ -20,7 +20,6 @@ var Insights = require('./components/insights'),
       <Route path="/" component={App}>
         <IndexRoute component={LandingPage}/>
         <Route path="dashboard" component={ScDash}/>
-        <Route path="insights" component={Insights}/>
       </Route>
     </Router>
   );

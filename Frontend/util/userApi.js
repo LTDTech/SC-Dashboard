@@ -8,6 +8,8 @@ module.exports = {
       success: function(returnUser) {
         console.log(returnUser);
         ServerAction.receivedUsers(returnUser);
+        console.log("going to dashboard");
+        hashHistory.push('dashboard');
       },
       error: function(error) {
         console.log("this was an error");

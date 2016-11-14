@@ -7,11 +7,10 @@ var React = require('react'),
   ReactDOM = require('react-dom'),
   NavBar = require('./navbar'),
   Footer = require('./footer'),
-  LoggedIn = require('./logged-in'),
   // GeoMap = require('./geo-map'),
   SideNavBar = require('./sideNav');
 
-var App = React.createClass({
+var LoggedIn = React.createClass({
     getInitialState: function() {
       return {loggedIn: false};
 
@@ -27,10 +26,19 @@ var App = React.createClass({
   render: function(){
     return (
       <div className="mainDiv">
-        {this.props.children}
+        <NavBar/>
+        <div className="row">
+          <div className="col-sm-2">
+            <SideNavBar/>
+          </div>
+          <div className="col-sm-10">
+            {this.props.children}
+          </div>
+        </div>
+        <Footer/>
       </div>
     );
   }
 });
 
-module.exports = App;
+module.exports = LoggedIn;

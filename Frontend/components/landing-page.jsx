@@ -2,6 +2,7 @@ var React = require('react'),
 ReactDOM = require('react-dom'),
 ClientAction = require('../actions/clientAction.js'),
 Footer = require('./footer'),
+LoggedIn = require('./logged-in'),
 hashHistory = require('react-router').hashHistory;
 
 var LandingPage = React.createClass({
@@ -11,9 +12,22 @@ var LandingPage = React.createClass({
   ,
   render: function() {
     return(
-      <div>
-        <div className="mainLand">
-          <div className="scLogin">
+      <div className="mainLand">
+        <div className="scLogin">
+          <div className="login-contents">
+            <img className="land-logo" src="../img/wysidio.jpg"></img>
+          </div>
+          <div className="sc-name-input">
+            <form className="sc-name-form">
+              <br/>
+                <input type="text"
+                  className="form-textbox"
+                  // value={this.state.username}
+                  // onChange={this.onChange}
+                  placeholder="Your Soundcloud Username"
+                  id="username" />
+              <br/>
+            </form>
             <button className="scButton" onClick={this.getUserData}>
               <div className="scButton2">
                 <img className="scIcon scButton3" src="../img/scicon4.png"></img>

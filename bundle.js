@@ -67,8 +67,7 @@
 	    Route,
 	    { path: '/', component: App },
 	    React.createElement(IndexRoute, { component: LandingPage }),
-	    React.createElement(Route, { path: 'dashboard', component: ScDash }),
-	    React.createElement(Route, { path: 'insights', component: Insights })
+	    React.createElement(Route, { path: 'dashboard', component: ScDash })
 	  )
 	);
 	
@@ -27133,6 +27132,7 @@
 	    ReactDOM = __webpack_require__(34),
 	    ClientAction = __webpack_require__(237),
 	    Footer = __webpack_require__(248),
+	    LoggedIn = __webpack_require__(250),
 	    hashHistory = __webpack_require__(173).hashHistory;
 	
 	var LandingPage = React.createClass({
@@ -27145,13 +27145,30 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'mainLand' },
 	      React.createElement(
 	        'div',
-	        { className: 'mainLand' },
+	        { className: 'scLogin' },
 	        React.createElement(
 	          'div',
-	          { className: 'scLogin' },
+	          { className: 'login-contents' },
+	          React.createElement('img', { className: 'land-logo', src: '../img/wysidio.jpg' })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'sc-name-input' },
+	          React.createElement(
+	            'form',
+	            { className: 'sc-name-form' },
+	            React.createElement('br', null),
+	            React.createElement('input', { type: 'text',
+	              className: 'form-textbox'
+	              // value={this.state.username}
+	              // onChange={this.onChange}
+	              , placeholder: 'Your Soundcloud Username',
+	              id: 'username' }),
+	            React.createElement('br', null)
+	          ),
 	          React.createElement(
 	            'button',
 	            { className: 'scButton', onClick: this.getUserData },
@@ -27519,6 +27536,8 @@
 	      success: function (returnUser) {
 	        console.log(returnUser);
 	        ServerAction.receivedUsers(returnUser);
+	        console.log("going to dashboard");
+	        hashHistory.push('dashboard');
 	      },
 	      error: function (error) {
 	        console.log("this was an error");
@@ -27562,7 +27581,10 @@
 	    ReactDOM = __webpack_require__(34),
 	    NavBar = __webpack_require__(247),
 	    Footer = __webpack_require__(248),
-	    SideNavBar = __webpack_require__(249);
+	    LoggedIn = __webpack_require__(250),
+	
+	// GeoMap = require('./geo-map'),
+	SideNavBar = __webpack_require__(249);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -27582,22 +27604,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'mainDiv' },
-	      React.createElement(NavBar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'row' },
-	        React.createElement(
-	          'div',
-	          { className: 'col-sm-2' },
-	          React.createElement(SideNavBar, null)
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'col-sm-10' },
-	          this.props.children
-	        )
-	      ),
-	      React.createElement(Footer, null)
+	      this.props.children
 	    );
 	  }
 	});
@@ -27611,7 +27618,12 @@
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(34),
 	    hashHistory = __webpack_require__(173).hashHistory,
-	    LandingPage = __webpack_require__(236);
+	    LoggedIn = __webpack_require__(250),
+	    Navbar = __webpack_require__(247),
+	    Footer = __webpack_require__(248),
+	
+	// GeoMap = require('./geo-map'),
+	LandingPage = __webpack_require__(236);
 	
 	var ScDash = React.createClass({
 	  displayName: 'ScDash',
@@ -27623,16 +27635,68 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'main-Sc-Div' },
+	      React.createElement(Navbar, null),
 	      React.createElement(
 	        'div',
 	        { className: 'dashHeader' },
 	        React.createElement(
 	          'h1',
 	          null,
-	          'Dashboard'
+	          'Your Dashboard'
 	        )
 	      ),
-	      React.createElement('div', { className: 'dash-content' })
+	      React.createElement(
+	        'div',
+	        { className: 'follower-content' },
+	        React.createElement(
+	          'div',
+	          { className: 'account-data' },
+	          React.createElement(
+	            'div',
+	            { className: 'p-f-f' },
+	            React.createElement(
+	              'div',
+	              { className: 'follower-plays' },
+	              React.createElement(
+	                'p',
+	                { className: 'follower-p' },
+	                'Plays'
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'follower-followers' },
+	              React.createElement(
+	                'p',
+	                { className: 'follower-p' },
+	                'Followers'
+	              )
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'follower-following' },
+	              React.createElement(
+	                'p',
+	                { className: 'follower-p' },
+	                'Following'
+	              )
+	            )
+	          ),
+	          React.createElement('div', { className: 'followers' })
+	        ),
+	        React.createElement('div', { className: 'map' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'track-content-header' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Track Activity'
+	        )
+	      ),
+	      React.createElement('div', { className: 'track-content' }),
+	      React.createElement(Footer, null)
 	    );
 	  }
 	});
@@ -27909,6 +27973,63 @@
 	});
 	
 	module.exports = SideNavBar;
+
+/***/ },
+/* 250 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ScDash = __webpack_require__(245),
+	    LandingPage = __webpack_require__(236),
+	    Insights = __webpack_require__(172),
+	    Login = __webpack_require__(246),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    ReactDOM = __webpack_require__(34),
+	    NavBar = __webpack_require__(247),
+	    Footer = __webpack_require__(248),
+	
+	// GeoMap = require('./geo-map'),
+	SideNavBar = __webpack_require__(249);
+	
+	var LoggedIn = React.createClass({
+	  displayName: 'LoggedIn',
+	
+	  getInitialState: function () {
+	    return { loggedIn: false };
+	  },
+	  insightsClick: function () {
+	    console.log("going to insights");
+	    hashHistory.push('/insights');
+	  },
+	  dashboardClick: function () {
+	    console.log("going to dashboard");
+	    hashHistory.push('/dashboard');
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'mainDiv' },
+	      React.createElement(NavBar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'row' },
+	        React.createElement(
+	          'div',
+	          { className: 'col-sm-2' },
+	          React.createElement(SideNavBar, null)
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'col-sm-10' },
+	          this.props.children
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = LoggedIn;
 
 /***/ }
 /******/ ]);
