@@ -8,10 +8,16 @@ module.exports = {
       user: user
     });
   },
-  receivedUsers: function(users) {
+  receivedUsers: function(data) {
     Dispatcher.dispatch({
       actionType: "receivedUsers",
-      data: users
+      data: data
+    });
+  },
+  receivedTracks: function(tracks) {
+    Dispatcher.dispatch({
+      actionType: "receivedTracks",
+      data: tracks
     });
   }
 };

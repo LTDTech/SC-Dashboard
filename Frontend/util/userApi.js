@@ -3,16 +3,14 @@ var ServerAction = require('../actions/serverAction.js');
 module.exports = {
   getUserData: function(data) {
     $.ajax({
-      url: 'http://sc.wysidio.com/sc/get/fiftyfollowers/insideoutpresents',
+      url: 'http://sc.wysidio.com/sc/get/all/test/collidoscopemusic',
       method: 'GET',
-      success: function(returnUser) {
-        console.log(returnUser);
-        ServerAction.receivedUsers(returnUser);
-        console.log("going to dashboard");
+      success: function(returnTracks) {
+        ServerAction.receivedTracks(returnTracks);
         hashHistory.push('dashboard');
       },
       error: function(error) {
-        console.log("this was an error");
+        console.log(error.statusCode());
       }
     });
   }

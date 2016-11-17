@@ -3,14 +3,17 @@ var React = require('react'),
   hashHistory = require('react-router').hashHistory,
   LoggedIn = require('./logged-in'),
   Navbar = require('./navbar'),
+  SessionStore = require('../stores/sessionStore'),
   Footer = require('./footer'),
+
   // GeoMap = require('./geo-map'),
   LandingPage = require('./landing-page');
 
 var ScDash = React.createClass({
     getInitialState: function() {
-      return {loggedIn: false};
+      return {tracks: SessionStore.allTracks()}
     },
+
   render: function(){
     return (
       <div className="main-Sc-Div">
