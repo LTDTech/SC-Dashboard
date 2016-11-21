@@ -2,14 +2,16 @@ var React = require('react'),
   ScDash = require('./ScDash'),
   LandingPage = require('./landing-page'),
   Insights = require('./insights'),
-  Login = require('./login'),
   hashHistory = require('react-router').hashHistory,
   ReactDOM = require('react-dom'),
   NavBar = require('./navbar'),
   Footer = require('./footer'),
-  LoggedIn = require('./logged-in'),
   // GeoMap = require('./geo-map'),
-  SideNavBar = require('./sideNav');
+  SideNavBar = require('./sideNav'),
+  AllTracks = require('./all-tracks'),
+  AllFollowers = require('./followers'),
+  UserPanel = require('./user-panel'),
+  Follower = require('./follower');
 
 var App = React.createClass({
     getInitialState: function() {

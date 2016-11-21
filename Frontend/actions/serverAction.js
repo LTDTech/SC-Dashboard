@@ -8,16 +8,22 @@ module.exports = {
       user: user
     });
   },
-  receivedUsers: function(data) {
+  receivedFollowers: function(followers) {
     Dispatcher.dispatch({
-      actionType: "receivedUsers",
-      data: data
+      actionType: "receivedFollowers",
+      data: followers
     });
   },
   receivedTracks: function(tracks) {
     Dispatcher.dispatch({
       actionType: "receivedTracks",
       data: tracks
+    });
+  },
+  receivedUser: function(user) {
+    Dispatcher.dispatch({
+      actionType: "receivedUserData",
+      data: user
     });
   }
 };

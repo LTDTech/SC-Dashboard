@@ -2,12 +2,11 @@ var React = require('react'),
 ReactDOM = require('react-dom'),
 ClientAction = require('../actions/clientAction.js'),
 Footer = require('./footer'),
-LoggedIn = require('./logged-in'),
 hashHistory = require('react-router').hashHistory;
 
 var LandingPage = React.createClass({
-  getUserData() {
-    ClientAction.getUserData();
+  checkUsername() {
+    ClientAction.checkUsername();
   }
   ,
   render: function() {
@@ -28,7 +27,7 @@ var LandingPage = React.createClass({
                   id="username" />
               <br/>
             </form>
-            <button className="scButton" onClick={this.getUserData}>
+            <button className="scButton" onClick={this.checkUsername}>
               <div className="scButton2">
                 <img className="scIcon scButton3" src="../img/scicon4.png"></img>
                 <h3 className="get-started">Get Started</h3>

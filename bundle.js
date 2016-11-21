@@ -50,8 +50,8 @@
 	
 	var Insights = __webpack_require__(172),
 	    LandingPage = __webpack_require__(236),
-	    App = __webpack_require__(250),
-	    ScDash = __webpack_require__(246);
+	    App = __webpack_require__(239),
+	    ScDash = __webpack_require__(240);
 	// import { CLIENT_ID, REDIRECT_URI } from './constants/auth';
 	
 	Router;
@@ -27131,15 +27131,14 @@
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(34),
 	    ClientAction = __webpack_require__(237),
-	    Footer = __webpack_require__(244),
-	    LoggedIn = __webpack_require__(245),
+	    Footer = __webpack_require__(238),
 	    hashHistory = __webpack_require__(173).hashHistory;
 	
 	var LandingPage = React.createClass({
 	  displayName: 'LandingPage',
 	
-	  getUserData() {
-	    ClientAction.getUserData();
+	  checkUsername() {
+	    ClientAction.checkUsername();
 	  },
 	
 	  render: function () {
@@ -27171,7 +27170,7 @@
 	          ),
 	          React.createElement(
 	            'button',
-	            { className: 'scButton', onClick: this.getUserData },
+	            { className: 'scButton', onClick: this.checkUsername },
 	            React.createElement(
 	              'div',
 	              { className: 'scButton2' },
@@ -27195,385 +27194,26 @@
 /* 237 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(238),
-	    UserApi = __webpack_require__(242);
+	var Dispatcher = __webpack_require__(259),
+	    UserApi = __webpack_require__(265);
 	
 	module.exports = {
-	    getUserData: function (user) {
-	        UserApi.getUserData(user);
+	    getTracks: function () {
+	        UserApi.getTracks();
+	    },
+	    checkUsername: function () {
+	        UserApi.checkUsername();
+	    },
+	    getFollowers: function () {
+	        UserApi.getFollowers();
+	    },
+	    getUserData: function () {
+	        UserApi.getUserData();
 	    }
 	};
 
 /***/ },
 /* 238 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(239).Dispatcher;
-	
-	module.exports = new Dispatcher();
-
-/***/ },
-/* 239 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 */
-	
-	module.exports.Dispatcher = __webpack_require__(240);
-
-
-/***/ },
-/* 240 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright (c) 2014-2015, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 * @providesModule Dispatcher
-	 * 
-	 * @preventMunge
-	 */
-	
-	'use strict';
-	
-	exports.__esModule = true;
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-	
-	var invariant = __webpack_require__(241);
-	
-	var _prefix = 'ID_';
-	
-	/**
-	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
-	 * different from generic pub-sub systems in two ways:
-	 *
-	 *   1) Callbacks are not subscribed to particular events. Every payload is
-	 *      dispatched to every registered callback.
-	 *   2) Callbacks can be deferred in whole or part until other callbacks have
-	 *      been executed.
-	 *
-	 * For example, consider this hypothetical flight destination form, which
-	 * selects a default city when a country is selected:
-	 *
-	 *   var flightDispatcher = new Dispatcher();
-	 *
-	 *   // Keeps track of which country is selected
-	 *   var CountryStore = {country: null};
-	 *
-	 *   // Keeps track of which city is selected
-	 *   var CityStore = {city: null};
-	 *
-	 *   // Keeps track of the base flight price of the selected city
-	 *   var FlightPriceStore = {price: null}
-	 *
-	 * When a user changes the selected city, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'city-update',
-	 *     selectedCity: 'paris'
-	 *   });
-	 *
-	 * This payload is digested by `CityStore`:
-	 *
-	 *   flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'city-update') {
-	 *       CityStore.city = payload.selectedCity;
-	 *     }
-	 *   });
-	 *
-	 * When the user selects a country, we dispatch the payload:
-	 *
-	 *   flightDispatcher.dispatch({
-	 *     actionType: 'country-update',
-	 *     selectedCountry: 'australia'
-	 *   });
-	 *
-	 * This payload is digested by both stores:
-	 *
-	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       CountryStore.country = payload.selectedCountry;
-	 *     }
-	 *   });
-	 *
-	 * When the callback to update `CountryStore` is registered, we save a reference
-	 * to the returned token. Using this token with `waitFor()`, we can guarantee
-	 * that `CountryStore` is updated before the callback that updates `CityStore`
-	 * needs to query its data.
-	 *
-	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
-	 *     if (payload.actionType === 'country-update') {
-	 *       // `CountryStore.country` may not be updated.
-	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
-	 *       // `CountryStore.country` is now guaranteed to be updated.
-	 *
-	 *       // Select the default city for the new country
-	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
-	 *     }
-	 *   });
-	 *
-	 * The usage of `waitFor()` can be chained, for example:
-	 *
-	 *   FlightPriceStore.dispatchToken =
-	 *     flightDispatcher.register(function(payload) {
-	 *       switch (payload.actionType) {
-	 *         case 'country-update':
-	 *         case 'city-update':
-	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
-	 *           FlightPriceStore.price =
-	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
-	 *           break;
-	 *     }
-	 *   });
-	 *
-	 * The `country-update` payload will be guaranteed to invoke the stores'
-	 * registered callbacks in order: `CountryStore`, `CityStore`, then
-	 * `FlightPriceStore`.
-	 */
-	
-	var Dispatcher = (function () {
-	  function Dispatcher() {
-	    _classCallCheck(this, Dispatcher);
-	
-	    this._callbacks = {};
-	    this._isDispatching = false;
-	    this._isHandled = {};
-	    this._isPending = {};
-	    this._lastID = 1;
-	  }
-	
-	  /**
-	   * Registers a callback to be invoked with every dispatched payload. Returns
-	   * a token that can be used with `waitFor()`.
-	   */
-	
-	  Dispatcher.prototype.register = function register(callback) {
-	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.register(...): Cannot register in the middle of a dispatch.') : invariant(false) : undefined;
-	    var id = _prefix + this._lastID++;
-	    this._callbacks[id] = callback;
-	    return id;
-	  };
-	
-	  /**
-	   * Removes a callback based on its token.
-	   */
-	
-	  Dispatcher.prototype.unregister = function unregister(id) {
-	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): Cannot unregister in the middle of a dispatch.') : invariant(false) : undefined;
-	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
-	    delete this._callbacks[id];
-	  };
-	
-	  /**
-	   * Waits for the callbacks specified to be invoked before continuing execution
-	   * of the current callback. This method should only be used by a callback in
-	   * response to a dispatched payload.
-	   */
-	
-	  Dispatcher.prototype.waitFor = function waitFor(ids) {
-	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
-	    for (var ii = 0; ii < ids.length; ii++) {
-	      var id = ids[ii];
-	      if (this._isPending[id]) {
-	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
-	        continue;
-	      }
-	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
-	      this._invokeCallback(id);
-	    }
-	  };
-	
-	  /**
-	   * Dispatches a payload to all registered callbacks.
-	   */
-	
-	  Dispatcher.prototype.dispatch = function dispatch(payload) {
-	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
-	    this._startDispatching(payload);
-	    try {
-	      for (var id in this._callbacks) {
-	        if (this._isPending[id]) {
-	          continue;
-	        }
-	        this._invokeCallback(id);
-	      }
-	    } finally {
-	      this._stopDispatching();
-	    }
-	  };
-	
-	  /**
-	   * Is this Dispatcher currently dispatching.
-	   */
-	
-	  Dispatcher.prototype.isDispatching = function isDispatching() {
-	    return this._isDispatching;
-	  };
-	
-	  /**
-	   * Call the callback stored with the given id. Also do some internal
-	   * bookkeeping.
-	   *
-	   * @internal
-	   */
-	
-	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
-	    this._isPending[id] = true;
-	    this._callbacks[id](this._pendingPayload);
-	    this._isHandled[id] = true;
-	  };
-	
-	  /**
-	   * Set up bookkeeping needed when dispatching.
-	   *
-	   * @internal
-	   */
-	
-	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
-	    for (var id in this._callbacks) {
-	      this._isPending[id] = false;
-	      this._isHandled[id] = false;
-	    }
-	    this._pendingPayload = payload;
-	    this._isDispatching = true;
-	  };
-	
-	  /**
-	   * Clear bookkeeping used for dispatching.
-	   *
-	   * @internal
-	   */
-	
-	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
-	    delete this._pendingPayload;
-	    this._isDispatching = false;
-	  };
-	
-	  return Dispatcher;
-	})();
-	
-	module.exports = Dispatcher;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
-
-/***/ },
-/* 241 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {/**
-	 * Copyright (c) 2013-present, Facebook, Inc.
-	 * All rights reserved.
-	 *
-	 * This source code is licensed under the BSD-style license found in the
-	 * LICENSE file in the root directory of this source tree. An additional grant
-	 * of patent rights can be found in the PATENTS file in the same directory.
-	 *
-	 */
-	
-	'use strict';
-	
-	/**
-	 * Use invariant() to assert state which your program assumes to be true.
-	 *
-	 * Provide sprintf-style format (only %s is supported) and arguments
-	 * to provide information about what broke and what you were
-	 * expecting.
-	 *
-	 * The invariant message will be stripped in production, but the invariant
-	 * will remain to ensure logic does not differ in production.
-	 */
-	
-	function invariant(condition, format, a, b, c, d, e, f) {
-	  if (process.env.NODE_ENV !== 'production') {
-	    if (format === undefined) {
-	      throw new Error('invariant requires an error message argument');
-	    }
-	  }
-	
-	  if (!condition) {
-	    var error;
-	    if (format === undefined) {
-	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
-	    } else {
-	      var args = [a, b, c, d, e, f];
-	      var argIndex = 0;
-	      error = new Error(format.replace(/%s/g, function () {
-	        return args[argIndex++];
-	      }));
-	      error.name = 'Invariant Violation';
-	    }
-	
-	    error.framesToPop = 1; // we don't care about invariant's own frame
-	    throw error;
-	  }
-	}
-	
-	module.exports = invariant;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
-
-/***/ },
-/* 242 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ServerAction = __webpack_require__(243);
-	
-	module.exports = {
-	  getUserData: function (data) {
-	    $.ajax({
-	      url: 'http://sc.wysidio.com/sc/get/all/test/collidoscopemusic',
-	      method: 'GET',
-	      success: function (returnTracks) {
-	        ServerAction.receivedTracks(returnTracks);
-	        hashHistory.push('dashboard');
-	      },
-	      error: function (error) {
-	        console.log(error.statusCode());
-	      }
-	    });
-	  }
-	};
-
-/***/ },
-/* 243 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Dispatcher = __webpack_require__(238);
-	
-	module.exports = {
-	
-	  createUser: function (user) {
-	    Dispatcher.dispatch({
-	      actionType: UserConstants.CREATE_USER,
-	      user: user
-	    });
-	  },
-	  receivedUsers: function (data) {
-	    Dispatcher.dispatch({
-	      actionType: "receivedUsers",
-	      data: data
-	    });
-	  },
-	  receivedTracks: function (tracks) {
-	    Dispatcher.dispatch({
-	      actionType: "receivedTracks",
-	      data: tracks
-	    });
-	  }
-	};
-
-/***/ },
-/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -27611,24 +27251,27 @@
 	module.exports = Footer;
 
 /***/ },
-/* 245 */
+/* 239 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
-	    ScDash = __webpack_require__(246),
+	    ScDash = __webpack_require__(240),
 	    LandingPage = __webpack_require__(236),
 	    Insights = __webpack_require__(172),
-	    Login = __webpack_require__(247),
 	    hashHistory = __webpack_require__(173).hashHistory,
 	    ReactDOM = __webpack_require__(34),
-	    NavBar = __webpack_require__(248),
-	    Footer = __webpack_require__(244),
+	    NavBar = __webpack_require__(241),
+	    Footer = __webpack_require__(238),
 	
 	// GeoMap = require('./geo-map'),
-	SideNavBar = __webpack_require__(249);
+	SideNavBar = __webpack_require__(264),
+	    AllTracks = __webpack_require__(263),
+	    AllFollowers = __webpack_require__(268),
+	    UserPanel = __webpack_require__(270),
+	    Follower = __webpack_require__(269);
 	
-	var LoggedIn = React.createClass({
-	  displayName: 'LoggedIn',
+	var App = React.createClass({
+	  displayName: 'App',
 	
 	  getInitialState: function () {
 	    return { loggedIn: false };
@@ -27645,39 +27288,29 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'mainDiv' },
-	      React.createElement(NavBar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'row' },
-	        React.createElement(
-	          'div',
-	          { className: 'col-sm-2' },
-	          React.createElement(SideNavBar, null)
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'col-sm-10' },
-	          this.props.children
-	        )
-	      ),
-	      React.createElement(Footer, null)
+	      this.props.children
 	    );
 	  }
 	});
 	
-	module.exports = LoggedIn;
+	module.exports = App;
 
 /***/ },
-/* 246 */
+/* 240 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(34),
 	    hashHistory = __webpack_require__(173).hashHistory,
-	    LoggedIn = __webpack_require__(245),
-	    Navbar = __webpack_require__(248),
-	    SessionStore = __webpack_require__(251),
-	    Footer = __webpack_require__(244),
+	    Navbar = __webpack_require__(241),
+	    SessionStore = __webpack_require__(242),
+	    Footer = __webpack_require__(238),
+	    AllTracks = __webpack_require__(263),
+	    Track = __webpack_require__(267),
+	    AllFollowers = __webpack_require__(268),
+	    Follower = __webpack_require__(269),
+	    UserPanel = __webpack_require__(270),
+	    ClientAction = __webpack_require__(237),
 	
 	
 	// GeoMap = require('./geo-map'),
@@ -27687,9 +27320,18 @@
 	  displayName: 'ScDash',
 	
 	  getInitialState: function () {
-	    return { tracks: SessionStore.allTracks() };
+	    return { user: SessionStore.user() };
 	  },
-	
+	  componentDidMount: function () {
+	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
+	    ClientAction.getUserData();
+	  },
+	  componentWillUnmount: function () {
+	    this.sessionStoreListener.remove();
+	  },
+	  onSessionChange: function () {
+	    this.setState({ user: SessionStore.user() });
+	  },
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -27710,38 +27352,21 @@
 	        React.createElement(
 	          'div',
 	          { className: 'account-data' },
+	          React.createElement(UserPanel, { user: this.state.user }),
 	          React.createElement(
 	            'div',
-	            { className: 'p-f-f' },
+	            { className: 'followers-title' },
 	            React.createElement(
-	              'div',
-	              { className: 'follower-plays' },
-	              React.createElement(
-	                'p',
-	                { className: 'follower-p' },
-	                'Plays'
-	              )
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'follower-followers' },
-	              React.createElement(
-	                'p',
-	                { className: 'follower-p' },
-	                'Followers'
-	              )
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'follower-following' },
-	              React.createElement(
-	                'p',
-	                { className: 'follower-p' },
-	                'Following'
-	              )
+	              'h3',
+	              null,
+	              'Your Followers'
 	            )
 	          ),
-	          React.createElement('div', { className: 'followers' })
+	          React.createElement(
+	            'div',
+	            { className: 'followers' },
+	            React.createElement(AllFollowers, null)
+	          )
 	        ),
 	        React.createElement('div', { className: 'map' })
 	      ),
@@ -27754,7 +27379,11 @@
 	          'Track Activity'
 	        )
 	      ),
-	      React.createElement('div', { className: 'track-content' }),
+	      React.createElement(
+	        'div',
+	        { className: 'main-track-content' },
+	        React.createElement(AllTracks, null)
+	      ),
 	      React.createElement(Footer, null)
 	    );
 	  }
@@ -27763,77 +27392,7 @@
 	module.exports = ScDash;
 
 /***/ },
-/* 247 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1);
-	
-	var LoginWindow = React.createClass({
-	  displayName: "LoginWindow",
-	
-	  render: function () {
-	    return React.createElement(
-	      "div",
-	      null,
-	      React.createElement(
-	        "div",
-	        { className: "loginBox form-inline container" },
-	        React.createElement(
-	          "div",
-	          { className: "login2" },
-	          React.createElement(
-	            "h2",
-	            null,
-	            "Allow \u201CWysidio\u201D access to your SoundCloud account?"
-	          ),
-	          React.createElement(
-	            "div",
-	            { className: "connectForm" },
-	            React.createElement(
-	              "form",
-	              null,
-	              React.createElement("br", null),
-	              React.createElement(
-	                "div",
-	                { className: "formbox" },
-	                React.createElement("input", { type: "text",
-	                  className: "form-textbox"
-	                  // value={this.state.username}
-	                  // onChange={this.onChange}
-	                  , placeholder: "Your email address",
-	                  id: "username" })
-	              ),
-	              React.createElement("br", null),
-	              React.createElement("br", null),
-	              React.createElement(
-	                "div",
-	                { className: "formbox" },
-	                React.createElement("input", { type: "password",
-	                  className: "form-textbox"
-	                  // value={this.state.username}
-	                  // onChange={this.onChange}
-	                  , placeholder: "Your password",
-	                  id: "password" })
-	              ),
-	              React.createElement("br", null),
-	              React.createElement(
-	                "div",
-	                { className: "cancelLogin" },
-	                React.createElement("input", { className: "cancel-login-button btn", type: "submit", value: "Cancel" }),
-	                React.createElement("input", { className: "login-button btn", type: "submit", value: "Connect" })
-	              )
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = LoginWindow;
-
-/***/ },
-/* 248 */
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -27928,123 +27487,12 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 249 */
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    LandingPage = __webpack_require__(236);
-	
-	var SideNavBar = React.createClass({
-	  displayName: 'SideNavBar',
-	
-	  getInitialState: function () {
-	    return { loggedIn: false };
-	  }, insightsClick: function () {
-	    console.log("going to insights");
-	    hashHistory.push('/insights');
-	  },
-	  dashboardClick: function () {
-	    console.log("going to dashboard");
-	    hashHistory.push('/dashboard');
-	  },
-	  render: function () {
-	    return React.createElement(
-	      'nav',
-	      { className: 'navbar navbar-default' },
-	      React.createElement(
-	        'div',
-	        { className: 'container-fluid leftNav' },
-	        React.createElement(
-	          'button',
-	          { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
-	          React.createElement(
-	            'span',
-	            { className: 'sr-only' },
-	            'Toggle navigation'
-	          ),
-	          React.createElement('span', { className: 'icon-bar' }),
-	          React.createElement('span', { className: 'icon-bar' }),
-	          React.createElement('span', { className: 'icon-bar' })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-brand nav nav-tabs nav-stacked hover', onClick: this.dashboardClick },
-	          'Dashboard'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-brand nav nav-tabs nav-stacked hover' },
-	          'Login/Signup'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-brand nav nav-tabs nav-stacked hover', onClick: this.insightsClick },
-	          'Insights'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-brand nav nav-tabs nav-stacked class:hover' },
-	          'Brand'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = SideNavBar;
-
-/***/ },
-/* 250 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ScDash = __webpack_require__(246),
-	    LandingPage = __webpack_require__(236),
-	    Insights = __webpack_require__(172),
-	    Login = __webpack_require__(247),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    ReactDOM = __webpack_require__(34),
-	    NavBar = __webpack_require__(248),
-	    Footer = __webpack_require__(244),
-	    LoggedIn = __webpack_require__(245),
-	
-	// GeoMap = require('./geo-map'),
-	SideNavBar = __webpack_require__(249);
-	
-	var App = React.createClass({
-	  displayName: 'App',
-	
-	  getInitialState: function () {
-	    return { loggedIn: false };
-	  },
-	  insightsClick: function () {
-	    console.log("going to insights");
-	    hashHistory.push('/insights');
-	  },
-	  dashboardClick: function () {
-	    console.log("going to dashboard");
-	    hashHistory.push('/dashboard');
-	  },
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'mainDiv' },
-	      this.props.children
-	    );
-	  }
-	});
-	
-	module.exports = App;
-
-/***/ },
-/* 251 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Store = __webpack_require__(252).Store;
-	var Dispatcher = __webpack_require__(238);
-	var TrackConstants = __webpack_require__(267);
+	var Store = __webpack_require__(243).Store;
+	var Dispatcher = __webpack_require__(259);
+	var TrackConstants = __webpack_require__(262);
 	var myStorage = localStorage;
 	var SessionStore = new Store(Dispatcher);
 	
@@ -28052,32 +27500,47 @@
 	var _authenticationErrors = [];
 	var _loggedIn = false;
 	
-	var _tracks = {};
-	
-	SessionStore.allTracks = function () {
-	  var _tracksArray = [];
-	  for (var id in _tracks) {
-	    if (_tracks.hasOwnProperty(id)) {
-	      _tracksArray.push(_tracks[id]);
-	    }
-	  }
-	  return _tracksArray;
-	};
+	var _tracks = [];
+	var _followers = [];
+	var _user = [];
 	
 	SessionStore.tracks = function () {
 	  return _tracks;
 	};
+	SessionStore.followers = function () {
+	  return _followers;
+	};
+	SessionStore.user = function () {
+	  return _user;
+	};
 	
-	var receivedTracks = function () {};
+	var receivedFollowers = function (receivedFollowers) {
+	  _followers = receivedFollowers;
+	  SessionStore.__emitChange();
+	};
+	
+	var receivedTracks = function (receivedTracks) {
+	  _tracks = receivedTracks;
+	  SessionStore.__emitChange();
+	};
+	var receivedUserData = function (receivedUserData) {
+	  _user = receivedUserData;
+	  SessionStore.__emitChange();
+	};
 	
 	SessionStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
-	    case "receivedUsers":
-	      receivedUsers();
+	    case "receivedFollowers":
+	      receivedFollowers(payload.data);
+	      console.log(payload.data);
 	      break;
 	    case "receivedTracks":
-	      receivedTracks(payload.data.trackData);
-	      console.log(payload.data.trackData);
+	      receivedTracks(payload.data);
+	      console.log(payload.data);
+	      break;
+	    case "receivedUserData":
+	      receivedUserData(payload.data);
+	      console.log(payload.data);
 	      break;
 	    case UserConstants.RECEIVE_CURRENT_USER:
 	      receiveCurrent(payload.user);
@@ -28100,7 +27563,7 @@
 	module.exports = SessionStore;
 
 /***/ },
-/* 252 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -28112,14 +27575,14 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(253);
-	module.exports.Mixin = __webpack_require__(257);
-	module.exports.ReduceStore = __webpack_require__(258);
-	module.exports.Store = __webpack_require__(259);
+	module.exports.Container = __webpack_require__(244);
+	module.exports.Mixin = __webpack_require__(249);
+	module.exports.ReduceStore = __webpack_require__(250);
+	module.exports.Store = __webpack_require__(251);
 
 
 /***/ },
-/* 253 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -28142,11 +27605,11 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxContainerSubscriptions = __webpack_require__(254);
+	var FluxContainerSubscriptions = __webpack_require__(245);
 	var React = __webpack_require__(1);
 	
-	var invariant = __webpack_require__(241);
-	var shallowEqual = __webpack_require__(256);
+	var invariant = __webpack_require__(247);
+	var shallowEqual = __webpack_require__(248);
 	
 	var Component = React.Component;
 	
@@ -28392,7 +27855,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 254 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -28410,7 +27873,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var FluxStoreGroup = __webpack_require__(255);
+	var FluxStoreGroup = __webpack_require__(246);
 	
 	var FluxContainerSubscriptions = (function () {
 	  function FluxContainerSubscriptions() {
@@ -28500,7 +27963,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 255 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -28519,7 +27982,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(241);
+	var invariant = __webpack_require__(247);
 	
 	/**
 	 * FluxStoreGroup allows you to execute a callback on every dispatch after
@@ -28581,7 +28044,62 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 256 */
+/* 247 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2013-present, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 */
+	
+	'use strict';
+	
+	/**
+	 * Use invariant() to assert state which your program assumes to be true.
+	 *
+	 * Provide sprintf-style format (only %s is supported) and arguments
+	 * to provide information about what broke and what you were
+	 * expecting.
+	 *
+	 * The invariant message will be stripped in production, but the invariant
+	 * will remain to ensure logic does not differ in production.
+	 */
+	
+	function invariant(condition, format, a, b, c, d, e, f) {
+	  if (process.env.NODE_ENV !== 'production') {
+	    if (format === undefined) {
+	      throw new Error('invariant requires an error message argument');
+	    }
+	  }
+	
+	  if (!condition) {
+	    var error;
+	    if (format === undefined) {
+	      error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+	    } else {
+	      var args = [a, b, c, d, e, f];
+	      var argIndex = 0;
+	      error = new Error(format.replace(/%s/g, function () {
+	        return args[argIndex++];
+	      }));
+	      error.name = 'Invariant Violation';
+	    }
+	
+	    error.framesToPop = 1; // we don't care about invariant's own frame
+	    throw error;
+	  }
+	}
+	
+	module.exports = invariant;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 248 */
 /***/ function(module, exports) {
 
 	/**
@@ -28653,7 +28171,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 257 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -28669,9 +28187,9 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(255);
+	var FluxStoreGroup = __webpack_require__(246);
 	
-	var invariant = __webpack_require__(241);
+	var invariant = __webpack_require__(247);
 	
 	/**
 	 * `FluxContainer` should be preferred over this mixin, but it requires using
@@ -28781,7 +28299,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 258 */
+/* 250 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -28801,10 +28319,10 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(259);
+	var FluxStore = __webpack_require__(251);
 	
-	var abstractMethod = __webpack_require__(266);
-	var invariant = __webpack_require__(241);
+	var abstractMethod = __webpack_require__(258);
+	var invariant = __webpack_require__(247);
 	
 	/**
 	 * This is the basic building block of a Flux application. All of your stores
@@ -28905,7 +28423,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 259 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -28923,11 +28441,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(260);
+	var _require = __webpack_require__(252);
 	
 	var EventEmitter = _require.EventEmitter;
 	
-	var invariant = __webpack_require__(241);
+	var invariant = __webpack_require__(247);
 	
 	/**
 	 * This class represents the most basic functionality for a FluxStore. Do not
@@ -29019,7 +28537,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 260 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29032,15 +28550,15 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(261),
-	  EmitterSubscription : __webpack_require__(262)
+	  EventEmitter: __webpack_require__(253),
+	  EmitterSubscription : __webpack_require__(254)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 261 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29059,11 +28577,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(262);
-	var EventSubscriptionVendor = __webpack_require__(264);
+	var EmitterSubscription = __webpack_require__(254);
+	var EventSubscriptionVendor = __webpack_require__(256);
 	
-	var emptyFunction = __webpack_require__(265);
-	var invariant = __webpack_require__(241);
+	var emptyFunction = __webpack_require__(257);
+	var invariant = __webpack_require__(247);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -29237,7 +28755,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 262 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29258,7 +28776,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(263);
+	var EventSubscription = __webpack_require__(255);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -29290,7 +28808,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 263 */
+/* 255 */
 /***/ function(module, exports) {
 
 	/**
@@ -29344,7 +28862,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 264 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29363,7 +28881,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(241);
+	var invariant = __webpack_require__(247);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -29453,7 +28971,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 265 */
+/* 257 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -29496,7 +29014,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 266 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29513,7 +29031,7 @@
 	
 	'use strict';
 	
-	var invariant = __webpack_require__(241);
+	var invariant = __webpack_require__(247);
 	
 	function abstractMethod(className, methodName) {
 	   true ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Subclasses of %s must override %s() with their own implementation.', className, methodName) : invariant(false) : undefined;
@@ -29523,12 +29041,758 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 267 */
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(260).Dispatcher;
+	
+	module.exports = new Dispatcher();
+
+/***/ },
+/* 260 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	module.exports.Dispatcher = __webpack_require__(261);
+
+
+/***/ },
+/* 261 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright (c) 2014-2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule Dispatcher
+	 * 
+	 * @preventMunge
+	 */
+	
+	'use strict';
+	
+	exports.__esModule = true;
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	
+	var invariant = __webpack_require__(247);
+	
+	var _prefix = 'ID_';
+	
+	/**
+	 * Dispatcher is used to broadcast payloads to registered callbacks. This is
+	 * different from generic pub-sub systems in two ways:
+	 *
+	 *   1) Callbacks are not subscribed to particular events. Every payload is
+	 *      dispatched to every registered callback.
+	 *   2) Callbacks can be deferred in whole or part until other callbacks have
+	 *      been executed.
+	 *
+	 * For example, consider this hypothetical flight destination form, which
+	 * selects a default city when a country is selected:
+	 *
+	 *   var flightDispatcher = new Dispatcher();
+	 *
+	 *   // Keeps track of which country is selected
+	 *   var CountryStore = {country: null};
+	 *
+	 *   // Keeps track of which city is selected
+	 *   var CityStore = {city: null};
+	 *
+	 *   // Keeps track of the base flight price of the selected city
+	 *   var FlightPriceStore = {price: null}
+	 *
+	 * When a user changes the selected city, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'city-update',
+	 *     selectedCity: 'paris'
+	 *   });
+	 *
+	 * This payload is digested by `CityStore`:
+	 *
+	 *   flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'city-update') {
+	 *       CityStore.city = payload.selectedCity;
+	 *     }
+	 *   });
+	 *
+	 * When the user selects a country, we dispatch the payload:
+	 *
+	 *   flightDispatcher.dispatch({
+	 *     actionType: 'country-update',
+	 *     selectedCountry: 'australia'
+	 *   });
+	 *
+	 * This payload is digested by both stores:
+	 *
+	 *   CountryStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       CountryStore.country = payload.selectedCountry;
+	 *     }
+	 *   });
+	 *
+	 * When the callback to update `CountryStore` is registered, we save a reference
+	 * to the returned token. Using this token with `waitFor()`, we can guarantee
+	 * that `CountryStore` is updated before the callback that updates `CityStore`
+	 * needs to query its data.
+	 *
+	 *   CityStore.dispatchToken = flightDispatcher.register(function(payload) {
+	 *     if (payload.actionType === 'country-update') {
+	 *       // `CountryStore.country` may not be updated.
+	 *       flightDispatcher.waitFor([CountryStore.dispatchToken]);
+	 *       // `CountryStore.country` is now guaranteed to be updated.
+	 *
+	 *       // Select the default city for the new country
+	 *       CityStore.city = getDefaultCityForCountry(CountryStore.country);
+	 *     }
+	 *   });
+	 *
+	 * The usage of `waitFor()` can be chained, for example:
+	 *
+	 *   FlightPriceStore.dispatchToken =
+	 *     flightDispatcher.register(function(payload) {
+	 *       switch (payload.actionType) {
+	 *         case 'country-update':
+	 *         case 'city-update':
+	 *           flightDispatcher.waitFor([CityStore.dispatchToken]);
+	 *           FlightPriceStore.price =
+	 *             getFlightPriceStore(CountryStore.country, CityStore.city);
+	 *           break;
+	 *     }
+	 *   });
+	 *
+	 * The `country-update` payload will be guaranteed to invoke the stores'
+	 * registered callbacks in order: `CountryStore`, `CityStore`, then
+	 * `FlightPriceStore`.
+	 */
+	
+	var Dispatcher = (function () {
+	  function Dispatcher() {
+	    _classCallCheck(this, Dispatcher);
+	
+	    this._callbacks = {};
+	    this._isDispatching = false;
+	    this._isHandled = {};
+	    this._isPending = {};
+	    this._lastID = 1;
+	  }
+	
+	  /**
+	   * Registers a callback to be invoked with every dispatched payload. Returns
+	   * a token that can be used with `waitFor()`.
+	   */
+	
+	  Dispatcher.prototype.register = function register(callback) {
+	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.register(...): Cannot register in the middle of a dispatch.') : invariant(false) : undefined;
+	    var id = _prefix + this._lastID++;
+	    this._callbacks[id] = callback;
+	    return id;
+	  };
+	
+	  /**
+	   * Removes a callback based on its token.
+	   */
+	
+	  Dispatcher.prototype.unregister = function unregister(id) {
+	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): Cannot unregister in the middle of a dispatch.') : invariant(false) : undefined;
+	    !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.unregister(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	    delete this._callbacks[id];
+	  };
+	
+	  /**
+	   * Waits for the callbacks specified to be invoked before continuing execution
+	   * of the current callback. This method should only be used by a callback in
+	   * response to a dispatched payload.
+	   */
+	
+	  Dispatcher.prototype.waitFor = function waitFor(ids) {
+	    !this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Must be invoked while dispatching.') : invariant(false) : undefined;
+	    for (var ii = 0; ii < ids.length; ii++) {
+	      var id = ids[ii];
+	      if (this._isPending[id]) {
+	        !this._isHandled[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): Circular dependency detected while ' + 'waiting for `%s`.', id) : invariant(false) : undefined;
+	        continue;
+	      }
+	      !this._callbacks[id] ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatcher.waitFor(...): `%s` does not map to a registered callback.', id) : invariant(false) : undefined;
+	      this._invokeCallback(id);
+	    }
+	  };
+	
+	  /**
+	   * Dispatches a payload to all registered callbacks.
+	   */
+	
+	  Dispatcher.prototype.dispatch = function dispatch(payload) {
+	    !!this._isDispatching ? process.env.NODE_ENV !== 'production' ? invariant(false, 'Dispatch.dispatch(...): Cannot dispatch in the middle of a dispatch.') : invariant(false) : undefined;
+	    this._startDispatching(payload);
+	    try {
+	      for (var id in this._callbacks) {
+	        if (this._isPending[id]) {
+	          continue;
+	        }
+	        this._invokeCallback(id);
+	      }
+	    } finally {
+	      this._stopDispatching();
+	    }
+	  };
+	
+	  /**
+	   * Is this Dispatcher currently dispatching.
+	   */
+	
+	  Dispatcher.prototype.isDispatching = function isDispatching() {
+	    return this._isDispatching;
+	  };
+	
+	  /**
+	   * Call the callback stored with the given id. Also do some internal
+	   * bookkeeping.
+	   *
+	   * @internal
+	   */
+	
+	  Dispatcher.prototype._invokeCallback = function _invokeCallback(id) {
+	    this._isPending[id] = true;
+	    this._callbacks[id](this._pendingPayload);
+	    this._isHandled[id] = true;
+	  };
+	
+	  /**
+	   * Set up bookkeeping needed when dispatching.
+	   *
+	   * @internal
+	   */
+	
+	  Dispatcher.prototype._startDispatching = function _startDispatching(payload) {
+	    for (var id in this._callbacks) {
+	      this._isPending[id] = false;
+	      this._isHandled[id] = false;
+	    }
+	    this._pendingPayload = payload;
+	    this._isDispatching = true;
+	  };
+	
+	  /**
+	   * Clear bookkeeping used for dispatching.
+	   *
+	   * @internal
+	   */
+	
+	  Dispatcher.prototype._stopDispatching = function _stopDispatching() {
+	    delete this._pendingPayload;
+	    this._isDispatching = false;
+	  };
+	
+	  return Dispatcher;
+	})();
+	
+	module.exports = Dispatcher;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ },
+/* 262 */
 /***/ function(module, exports) {
 
 	module.exports = {
 	  RECEIVE_TRACKS: "RECEIVE_TRACKS"
 	};
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    ClientAction = __webpack_require__(237),
+	    Track = __webpack_require__(267),
+	    SessionStore = __webpack_require__(242);
+	
+	var AllTracks = React.createClass({
+	  displayName: 'AllTracks',
+	
+	  getInitialState: function () {
+	    return { tracks: SessionStore.tracks() };
+	  },
+	  componentDidMount: function () {
+	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
+	    ClientAction.getTracks();
+	  },
+	  componentWillUnmount: function () {
+	    this.sessionStoreListener.remove();
+	  },
+	  onSessionChange: function () {
+	    this.setState({ tracks: SessionStore.tracks() });
+	  },
+	  render: function () {
+	    var renderTracks = [];
+	    var that = this;
+	    this.state.tracks.forEach(function (track) {
+	      renderTracks.push(React.createElement(Track, { className: 'main-track', track: track, key: track.id }));
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'all-tracks' },
+	      renderTracks
+	    );
+	  }
+	});
+	
+	module.exports = AllTracks;
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    LandingPage = __webpack_require__(236);
+	
+	var SideNavBar = React.createClass({
+	  displayName: 'SideNavBar',
+	
+	  getInitialState: function () {
+	    return { loggedIn: false };
+	  }, insightsClick: function () {
+	    console.log("going to insights");
+	    hashHistory.push('/insights');
+	  },
+	  dashboardClick: function () {
+	    console.log("going to dashboard");
+	    hashHistory.push('/dashboard');
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'nav',
+	      { className: 'navbar navbar-default' },
+	      React.createElement(
+	        'div',
+	        { className: 'container-fluid leftNav' },
+	        React.createElement(
+	          'button',
+	          { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
+	          React.createElement(
+	            'span',
+	            { className: 'sr-only' },
+	            'Toggle navigation'
+	          ),
+	          React.createElement('span', { className: 'icon-bar' }),
+	          React.createElement('span', { className: 'icon-bar' }),
+	          React.createElement('span', { className: 'icon-bar' })
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'navbar-brand nav nav-tabs nav-stacked hover', onClick: this.dashboardClick },
+	          'Dashboard'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'navbar-brand nav nav-tabs nav-stacked hover' },
+	          'Login/Signup'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'navbar-brand nav nav-tabs nav-stacked hover', onClick: this.insightsClick },
+	          'Insights'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'navbar-brand nav nav-tabs nav-stacked class:hover' },
+	          'Brand'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = SideNavBar;
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ServerAction = __webpack_require__(266);
+	
+	module.exports = {
+	  checkUsername: function (data) {
+	    $.ajax({
+	      url: 'http://sc.wysidio.com/sc/get/filtered/tracks/collidoscopemusic',
+	      method: 'GET',
+	      success: function (returnTracks) {
+	        hashHistory.push('dashboard');
+	      },
+	      error: function (error) {
+	        console.log(error.statusCode(), "User Not Found");
+	      }
+	    });
+	  },
+	  getTracks: function (data) {
+	    $.ajax({
+	      url: 'http://sc.wysidio.com/sc/get/filtered/tracks/collidoscopemusic',
+	      method: 'GET',
+	      success: function (returnTracks) {
+	        ServerAction.receivedTracks(returnTracks);
+	      },
+	      error: function (error) {
+	        console.log(error.statusCode());
+	      }
+	    });
+	  },
+	  getFollowers: function (data) {
+	    $.ajax({
+	      url: 'http://sc.wysidio.com/sc/get/filtered/followers/insideoutpresents',
+	      method: 'GET',
+	      success: function (receivedFollowers) {
+	        ServerAction.receivedFollowers(receivedFollowers);
+	      },
+	      error: function (error) {
+	        console.log(error.statusCode());
+	      }
+	    });
+	  },
+	  getUserData: function (data) {
+	    $.ajax({
+	      url: 'http://sc.wysidio.com/sc/get/filtered/collidoscopemusic',
+	      method: 'GET',
+	      success: function (receivedUser) {
+	        ServerAction.receivedUser(receivedUser);
+	      },
+	      error: function (error) {
+	        console.log(error.statusCode());
+	      }
+	    });
+	  }
+	};
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Dispatcher = __webpack_require__(259);
+	
+	module.exports = {
+	
+	  createUser: function (user) {
+	    Dispatcher.dispatch({
+	      actionType: UserConstants.CREATE_USER,
+	      user: user
+	    });
+	  },
+	  receivedFollowers: function (followers) {
+	    Dispatcher.dispatch({
+	      actionType: "receivedFollowers",
+	      data: followers
+	    });
+	  },
+	  receivedTracks: function (tracks) {
+	    Dispatcher.dispatch({
+	      actionType: "receivedTracks",
+	      data: tracks
+	    });
+	  },
+	  receivedUser: function (user) {
+	    Dispatcher.dispatch({
+	      actionType: "receivedUserData",
+	      data: user
+	    });
+	  }
+	};
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    ClientAction = __webpack_require__(237),
+	    SessionStore = __webpack_require__(242);
+	
+	var Track = React.createClass({
+	  displayName: 'Track',
+	
+	  getInitialState: function () {
+	    return { tracks: SessionStore.tracks() };
+	  },
+	  componentDidMount: function () {
+	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
+	    ClientAction.getTracks;
+	  },
+	  componentWillUnmount: function () {
+	    this.sessionStoreListener.remove();
+	  },
+	  onSessionChange: function () {
+	    this.setState({ tracks: SessionStore.tracks() });
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-track' },
+	      React.createElement(
+	        'div',
+	        { className: 'track-pic' },
+	        React.createElement('img', { src: this.props.track.artwork_url, alt: 'Track Picture' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'track-content' },
+	        React.createElement(
+	          'div',
+	          { className: 'track-info' },
+	          React.createElement(
+	            'div',
+	            { className: 'track-name' },
+	            React.createElement(
+	              'div',
+	              { className: 'track-title' },
+	              React.createElement(
+	                'a',
+	                { href: this.props.track.permalink_url },
+	                this.props.track.title
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'track-plays' },
+	            React.createElement(
+	              'p',
+	              { className: 'track-text' },
+	              'Plays'
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'track-react' },
+	              this.props.track.playback_count
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'track-likes' },
+	            React.createElement(
+	              'p',
+	              { className: 'track-text' },
+	              'Likes'
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'track-react' },
+	              this.props.track.favoritings_count
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'track-reposts' },
+	            React.createElement('img', { className: 'repost-img', src: '../img/reposticon.png' }),
+	            React.createElement(
+	              'div',
+	              { className: 'track-react' },
+	              React.createElement(
+	                'p',
+	                null,
+	                '#'
+	              )
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'track-wav' },
+	          React.createElement('img', { className: 'waveform', src: this.props.track.waveform_url })
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	// this.props.track.##
+	module.exports = Track;
+
+/***/ },
+/* 268 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    ClientAction = __webpack_require__(237),
+	    Track = __webpack_require__(267),
+	    SessionStore = __webpack_require__(242),
+	    Follower = __webpack_require__(269);
+	
+	var AllFollowers = React.createClass({
+	  displayName: 'AllFollowers',
+	
+	  getInitialState: function () {
+	    return { followers: SessionStore.followers() };
+	  },
+	  componentDidMount: function () {
+	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
+	    ClientAction.getFollowers();
+	  },
+	  componentWillUnmount: function () {
+	    this.sessionStoreListener.remove();
+	  },
+	  onSessionChange: function () {
+	    this.setState({ followers: SessionStore.followers() });
+	  },
+	  render: function () {
+	    var renderFollowers = [];
+	    var that = this;
+	    this.state.followers.forEach(function (follower) {
+	      renderFollowers.push(React.createElement(Follower, { className: 'main-follower', follower: follower, key: follower.id }));
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'all-followers' },
+	      renderFollowers
+	    );
+	  }
+	});
+	
+	module.exports = AllFollowers;
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    ClientAction = __webpack_require__(237),
+	    Track = __webpack_require__(267),
+	    SessionStore = __webpack_require__(242);
+	
+	var Follower = React.createClass({
+	  displayName: 'Follower',
+	
+	  getInitialState: function () {
+	    return { followers: SessionStore.followers() };
+	  },
+	  componentDidMount: function () {},
+	  componentWillUnmount: function () {
+	    this.sessionStoreListener.remove();
+	  },
+	  onSessionChange: function () {
+	    this.setState({ followers: SessionStore.followers() });
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-follower' },
+	      React.createElement(
+	        'div',
+	        { className: 'follower-pic-div' },
+	        React.createElement('img', { className: 'followerPic', src: this.props.follower.avatar_url, alt: 'Profile Picture' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'follower-info' },
+	        React.createElement(
+	          'div',
+	          { className: 'follower-name' },
+	          React.createElement(
+	            'a',
+	            { href: this.props.follower.permalink_url },
+	            this.props.follower.username
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'follower-city' },
+	          this.props.follower.city
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Follower;
+
+/***/ },
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    ClientAction = __webpack_require__(237),
+	    SessionStore = __webpack_require__(242);
+	
+	var UserPanel = React.createClass({
+	  displayName: 'UserPanel',
+	
+	  getInitialState: function () {
+	    return { user: SessionStore.user() };
+	  },
+	  componentDidMount: function () {
+	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
+	    ClientAction.getUserData();
+	  },
+	  componentWillUnmount: function () {
+	    this.sessionStoreListener.remove();
+	  },
+	  onSessionChange: function () {
+	    this.setState({ user: SessionStore.user() });
+	  },
+	  render: function () {
+	    var renderUser = [];
+	    var that = this;
+	    return React.createElement(
+	      'div',
+	      { className: 'p-f-f' },
+	      React.createElement(
+	        'div',
+	        { className: 'follower-plays' },
+	        React.createElement(
+	          'p',
+	          { className: 'follower-p' },
+	          'Plays'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'follower-followers' },
+	        React.createElement(
+	          'p',
+	          { className: 'follower-p' },
+	          'Followers'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'pff-text' },
+	          this.props.user.followers_count
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'follower-following' },
+	        React.createElement(
+	          'p',
+	          { className: 'follower-p' },
+	          'Following'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'pff-text' },
+	          this.props.user.followings_count
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = UserPanel;
 
 /***/ }
 /******/ ]);
