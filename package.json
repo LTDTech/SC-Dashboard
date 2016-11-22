@@ -1,0 +1,34 @@
+{
+  "name": "SC-Dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LTDTech/SC-Dashboard.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LTDTech/SC-Dashboard/issues"
+  },
+  "homepage": "https://github.com/LTDTech/SC-Dashboard#readme",
+  "dependencies": {
+    "babel-core": "^6.17.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-react": "^6.16.0",
+    "flux": "^3.0.0",
+    "jquery": "^3.1.1",
+    "react-dom": "^15.3.2",
+    "react-router": "^2.8.1",
+    "redux": "^3.6.0",
+    "redux-logger": "^2.7.0",
+    "soundcloud": "^3.1.2",
+    "webpack": "^1.13.2"
+  },
+  "devDependencies": {},
+  "keywords": []
+}

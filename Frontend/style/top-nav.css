@@ -1,0 +1,22 @@
+.navbar-default {
+  margin-bottom: 0px;
+}
+
+.topNavLeft {
+  align-items: flex-start;
+  float: left;
+}
+.topNavRight {
+  align-items: flex-end;
+  float: right;
+  justify-content: flex-end;
+  height: 48px;
+  width: 60px
+  border: none;
+}
+.topNav {
+  background-color: black;
+  display: flex;
+  height: 50px;
+  border: 0;
+}
