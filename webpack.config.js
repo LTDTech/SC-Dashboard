@@ -23,7 +23,7 @@ module.exports = {
   resolve: {
     extensions: ["", ".js", '.jsx']
   },
-  "scripts": {
-  "build": "webpack --config ./webpack.config.js"
+  scripts: {
+  build: "webpack --config ./webpack.config.js"
 }
 };
