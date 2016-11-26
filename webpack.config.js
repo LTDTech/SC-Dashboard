@@ -22,5 +22,8 @@ module.exports = {
   devtool: 'source-maps',
   resolve: {
     extensions: ["", ".js", '.jsx']
-  }
+  },
+  "scripts": {
+  "build": "webpack --config ./webpack.config.js"
+}
 };
