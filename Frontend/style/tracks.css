@@ -84,7 +84,7 @@
 .track-title {
   margin: auto;
 }
-a:hover {
+.track-title a:hover {
   color: white;
 }
 a {

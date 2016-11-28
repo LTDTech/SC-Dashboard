@@ -6,25 +6,18 @@ var React = require('react'),
   ReactDOM = require('react-dom'),
   NavBar = require('./navbar'),
   Footer = require('./footer'),
-  // GeoMap = require('./geo-map'),
   SideNavBar = require('./sideNav'),
   AllTracks = require('./all-tracks'),
   AllFollowers = require('./followers'),
   UserPanel = require('./user-panel'),
+  GeoMap = require('./geo-map'),
+  Login = require('./user/login'),
+  SignUpPage = require('./user/sign-up'),
   Follower = require('./follower');
 
 var App = React.createClass({
     getInitialState: function() {
       return {loggedIn: false};
-
-    },
-    insightsClick: function() {
-      console.log("going to insights");
-      hashHistory.push('/insights');
-    },
-    dashboardClick: function() {
-      console.log("going to dashboard");
-      hashHistory.push('/dashboard');
     },
   render: function(){
     return (

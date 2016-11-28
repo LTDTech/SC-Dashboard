@@ -10,17 +10,19 @@ var React = require('react'),
   Follower = require('./follower'),
   UserPanel = require('./user-panel'),
   ClientAction = require('../actions/clientAction.js'),
-
-  // GeoMap = require('./geo-map'),
+  GeoMap = require('./geo-map'),
   LandingPage = require('./landing-page');
 
 var ScDash = React.createClass({
   getInitialState: function() {
-    return {user: SessionStore.user()}
-  },
+    return {user: SessionStore.user(),
+    username: SessionStore.getUsername()};
+  }
+  ,
   componentDidMount: function() {
     this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
-    ClientAction.getUserData();
+    ClientAction.getUserInfo(this.state.username);
+    ClientAction.getFollowers(this.state.username);
   },
   componentWillUnmount: function() {
     this.sessionStoreListener.remove();
@@ -29,6 +31,8 @@ var ScDash = React.createClass({
     this.setState({user: SessionStore.user()});
   },
   render: function(){
+    var renderFollowers = [];
+    var that = this;
     return (
       <div className="main-Sc-Div">
         <Navbar/>
@@ -46,7 +50,8 @@ var ScDash = React.createClass({
               <AllFollowers/>
             </div>
           </div>
-          <div className="map">
+          <div className="the-map">
+            <GeoMap/>
           </div>
         </div>
         <div className="track-content-header">

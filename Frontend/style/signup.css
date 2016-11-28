@@ -1,0 +1,27 @@
+.main-signup {
+  width: 100%;
+  height: 100%;
+}
+
+.signup-body {
+  width: 70%;
+  min-height: 700px;
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 75px;
+}
+.signup-form {
+  width: 300px;
+  height: 600px;
+  border: 1px solid silver;
+  border-radius: 7px;
+  background-color: #E9EBEE;
+}
+.sign-up-header {
+  font-size: 25px;
+  margin-top: 30px;
+  font-family: Verdana;
+  color: black;
+}

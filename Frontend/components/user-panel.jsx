@@ -4,27 +4,9 @@ var React = require('react'),
   SessionStore = require('../stores/sessionStore');
 
   var UserPanel = React.createClass({
-      getInitialState: function() {
-        return {user: SessionStore.user()}
-      },
-      componentDidMount: function() {
-        this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
-        ClientAction.getUserData();
-      },
-      componentWillUnmount: function() {
-        this.sessionStoreListener.remove();
-      },
-      onSessionChange: function() {
-        this.setState({user: SessionStore.user()});
-      },
     render: function(){
-      var renderUser = [];
-      var that = this;
       return (
         <div className="p-f-f">
-          <div className="follower-plays">
-            <p className="follower-p">Plays</p>
-          </div>
           <div className="follower-followers">
             <p className="follower-p">Followers</p>
             <div className="pff-text">
@@ -35,6 +17,12 @@ var React = require('react'),
             <p className="follower-p">Following</p>
             <div className="pff-text">
               {this.props.user.followings_count}
+            </div>
+          </div>
+          <div className="follower-plays">
+            <p className="follower-p">Tracks</p>
+            <div className="pff-text">
+              {this.props.user.track_count}
             </div>
           </div>
         </div>

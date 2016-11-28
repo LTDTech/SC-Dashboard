@@ -5,7 +5,10 @@ var React = require('react'),
 var Insights = require('./components/insights'),
   LandingPage = require('./components/landing-page'),
   App = require('./components/app'),
-  ScDash = require('./components/ScDash');
+  ScDash = require('./components/ScDash'),
+  Login = require('./components/user/login'),
+  SignUpPage = require('./components/user/sign-up');
+
 // import { CLIENT_ID, REDIRECT_URI } from './constants/auth';
 
   Router
@@ -20,6 +23,8 @@ var Insights = require('./components/insights'),
       <Route path="/" component={App}>
         <IndexRoute component={LandingPage}/>
         <Route path="dashboard" component={ScDash}/>
+        <Route path="login" component={Login}/>
+        <Route path="signup" component={SignUpPage}/>
       </Route>
     </Router>
   );

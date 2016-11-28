@@ -11,7 +11,7 @@ var Footer = React.createClass({
     return (
       <div className="footer">
         <nav className="navbar navbar-default bottom-Nav">
-          <div className="navbar-header topNavLeft">
+          <div className="navbar-header">
             <div className="footer-logo-div">
               <img className="footer-logo" src='../img/wysidio.jpg'>
               </img>

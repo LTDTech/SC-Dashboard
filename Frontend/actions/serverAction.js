@@ -25,5 +25,11 @@ module.exports = {
       actionType: "receivedUserData",
       data: user
     });
+  },
+  receivedUserInfo: function(userData) {
+    Dispatcher.dispatch({
+      actionType: "receivedUserInfo",
+      data: userData
+    });
   }
 };

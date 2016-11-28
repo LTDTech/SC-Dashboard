@@ -6,11 +6,13 @@ var React = require('react'),
 
   var AllTracks = React.createClass({
       getInitialState: function() {
-        return {tracks: SessionStore.tracks()}
+        return {tracks: SessionStore.tracks(),
+        user: SessionStore.user(),
+        username: SessionStore.getUsername()};
       },
       componentDidMount: function() {
         this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
-        ClientAction.getTracks();
+        ClientAction.getTracks(this.state.username);
       },
       componentWillUnmount: function() {
         this.sessionStoreListener.remove();

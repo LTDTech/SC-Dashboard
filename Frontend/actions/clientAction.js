@@ -3,16 +3,16 @@ var Dispatcher = require('../dispatcher/dispatcher.js'),
 
 
 module.exports = {
-  getTracks: function() {
-      UserApi.getTracks();
+  getTracks: function(name) {
+      UserApi.getTracks(name);
   },
-  checkUsername: function() {
-      UserApi.checkUsername();
+  getFollowers: function(name) {
+      UserApi.getFollowers(name);
   },
-  getFollowers: function() {
-      UserApi.getFollowers();
+  getUserData: function(name) {
+    UserApi.getUserData(name);
   },
-  getUserData: function() {
-    UserApi.getUserData();
+  getUserInfo: function(username) {
+    UserApi.getUserInfo(username);
   }
 };

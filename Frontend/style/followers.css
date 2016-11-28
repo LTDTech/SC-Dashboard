@@ -37,3 +37,6 @@
   color: #999EBA;
   margin: auto;
 }
+.follower-name a:hover {
+  color: white;
+}

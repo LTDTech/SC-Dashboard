@@ -3,10 +3,12 @@ var React = require('react'),
   ReactDOM = require('react-dom');
 
 var GeoMap = React.createClass({
+  componentDidMount: function() {
+    $('#map').vectorMap({map: 'us_aea'});
   },
   render: function(){
     return (
-      <div id="usa-map">
+      <div className="map">
       </div>
     );
   }

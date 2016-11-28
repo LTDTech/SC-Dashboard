@@ -4,19 +4,6 @@ var React = require('react'),
   SessionStore = require('../stores/sessionStore');
 
   var Track = React.createClass({
-      getInitialState: function() {
-        return {tracks: SessionStore.tracks()}
-      },
-      componentDidMount: function() {
-        this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
-        ClientAction.getTracks;
-      },
-      componentWillUnmount: function() {
-        this.sessionStoreListener.remove();
-      },
-      onSessionChange: function() {
-        this.setState({tracks: SessionStore.tracks()});
-      },
     render: function(){
       return (
         <div className="main-track">

@@ -4,8 +4,14 @@ var React = require('react'),
   LandingPage = require('./landing-page');
 
 var NavBar = React.createClass({
-    getInitialState: function() {
-      return {loggedIn: false};
+    loginClick() {
+      hashHistory.push('/login');
+    },
+    logoClick() {
+      hashHistory.push('/dashboard');
+    },
+    signUpClick() {
+      hashHistory.push('/signup');
     },
   render: function(){
     return (
@@ -18,9 +24,19 @@ var NavBar = React.createClass({
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <a className="logo" href="/index.html"><img className="logo" src='../img/wysidio.jpg'></img></a>
+              <a onClick={this.logoClick} className="logo"><img className="logo" src='../img/wysidio.jpg'></img></a>
           </div>
           <div className="topNavRight">
+            <div>
+              <a className="loginLink navbar-brand" onClick={this.loginClick}>LOGIN
+              </a>
+              <a className="loginLink navbar-brand" onClick={this.signUpClick}>SIGN UP
+              </a>
+              <a className="loginLink navbar-brand" onClick={this.loginClick}>SERVICES
+              </a>
+              <a className="loginLink navbar-brand" onClick={this.loginClick}>ABOUT
+              </a>
+            </div>
             <div className="btn-group navButton">
               <button type="button" className="navButton btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img className="userPro navButton" src='../img/userprofilepic.jpg'></img><span className="caret"></span>

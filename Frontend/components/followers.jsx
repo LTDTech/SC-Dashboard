@@ -7,17 +7,20 @@ var React = require('react'),
 
   var AllFollowers = React.createClass({
       getInitialState: function() {
-        return {followers: SessionStore.followers()}
+        return {followers: SessionStore.followers(),
+        user: SessionStore.user(),
+        username: SessionStore.getUsername()};
       },
       componentDidMount: function() {
         this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
-        ClientAction.getFollowers();
       },
       componentWillUnmount: function() {
         this.sessionStoreListener.remove();
       },
       onSessionChange: function() {
-        this.setState({followers: SessionStore.followers()});
+        this.setState({followers: SessionStore.followers(),
+        user: SessionStore.user(),
+        username: SessionStore.getUsername()});
       },
     render: function(){
       var renderFollowers = [];

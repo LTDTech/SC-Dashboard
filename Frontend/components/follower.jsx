@@ -10,9 +10,9 @@ var React = require('react'),
       },
       componentDidMount: function() {
       },
-      componentWillUnmount: function() {
-        this.sessionStoreListener.remove();
-      },
+      // componentWillUnmount: function() {
+      //   this.sessionStoreListener.remove();
+      // },
       onSessionChange: function() {
         this.setState({followers: SessionStore.followers()});
       },

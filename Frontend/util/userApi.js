@@ -1,21 +1,22 @@
 var ServerAction = require('../actions/serverAction.js');
 
 module.exports = {
-  checkUsername: function(data) {
+  getUserData: function(name) {
     $.ajax({
-      url: 'http://sc.wysidio.com/sc/get/filtered/tracks/collidoscopemusic',
+      url: 'http://sc.wysidio.com/sc/get/filtered/' + name,
       method: 'GET',
-      success: function(returnTracks) {
+      success: function(receivedUser) {
         hashHistory.push('dashboard');
+        ServerAction.receivedUser(receivedUser);
       },
       error: function(error) {
-        console.log(error.statusCode(), "User Not Found");
+        console.log(error.statusCode());
       }
     });
   },
-  getTracks: function(data) {
+  getTracks: function(name) {
     $.ajax({
-      url: 'http://sc.wysidio.com/sc/get/filtered/tracks/collidoscopemusic',
+      url: 'http://sc.wysidio.com/sc/get/filtered/tracks/' + name,
       method: 'GET',
       success: function(returnTracks) {
         ServerAction.receivedTracks(returnTracks);
@@ -25,9 +26,9 @@ module.exports = {
       }
     });
   },
-  getFollowers: function(data) {
+  getFollowers: function(name) {
     $.ajax({
-      url: 'http://sc.wysidio.com/sc/get/filtered/followers/insideoutpresents',
+      url: 'http://sc.wysidio.com/sc/get/filtered/followers/' + name,
       method: 'GET',
       success: function(receivedFollowers) {
         ServerAction.receivedFollowers(receivedFollowers);
@@ -37,12 +38,13 @@ module.exports = {
       }
     });
   },
-  getUserData: function(data) {
+  getUserInfo: function(name) {
     $.ajax({
-      url: 'http://sc.wysidio.com/sc/get/filtered/collidoscopemusic',
+      url: 'http://sc.wysidio.com/sc/get/filtered/' + name,
       method: 'GET',
-      success: function(receivedUser) {
-        ServerAction.receivedUser(receivedUser);
+      success: function(userInfo) {
+        ServerAction.receivedUserInfo(userInfo);
+        console.log(name, "here's the username");
       },
       error: function(error) {
         console.log(error.statusCode());

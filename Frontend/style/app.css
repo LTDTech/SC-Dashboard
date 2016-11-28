@@ -12,8 +12,6 @@
 .row {
   height: 100%;
 }
-
-
 .nav-tabs {
   float: left;
 }
@@ -26,11 +24,7 @@
   float: right;
   justify-content: center;
 }
-.navButton {
-  background-color: black;
-  border: none;
-  float: right;
-}
+
 .btn-group {
   float: right;
   width: 60px;
@@ -45,7 +39,6 @@
   width: 40px;
   background-color: black;
 }
-
 .mainDiv {
   width: 100%;
   height: 100%;

@@ -7,16 +7,27 @@
   float: left;
 }
 .topNavRight {
+  display: flex;
+  flex-direction: row;
   align-items: flex-end;
   float: right;
   justify-content: flex-end;
-  height: 48px;
-  width: 60px
-  border: none;
+  height: 50px;
+  width: 100%;
+  margin-left: auto;
 }
 .topNav {
   background-color: black;
   display: flex;
   height: 50px;
   border: 0;
+}
+.loginLink {
+  border-left: 1px solid silver;
+}
+.navButton {
+  border-left: 1px solid silver;
+  background-color: black;
+  border: none;
+  float: right;
 }
