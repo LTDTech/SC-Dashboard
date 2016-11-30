@@ -5,10 +5,12 @@
   "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack.config.jsr"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LTDTech/SC-Dashboard.git"
+    
   },
   "author": "",
   "license": "ISC",
