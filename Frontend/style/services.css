@@ -1,0 +1,68 @@
+.main-services {
+  height: 100%;
+  width: 100%;
+}
+.services-body {
+  min-height: 600px;
+}
+.artist-services-div {
+  display: flex;
+  flex-direction: row;
+  width: 75%;
+  margin-left: auto;
+  margin-right: auto;
+  min-height: 300px;
+}
+.artist-service {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.service-text {
+  font-family: Catamaran;
+  font-weight: 300;
+  font-size: 15px;
+  color: #898989;
+}
+h5 {
+  font-family: catamaran, sans-serif;
+  color: #282d33;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4em;
+}
+.services-header {
+  color: #5664a4;
+  text-align: center;
+  font-family: catamaran, sans-serif;
+  font-weight: bold;
+  font-size: 52px;
+  height: 67px;
+  margin-top: 20px;
+}
+.services-h-pic {
+  height: 250px;
+  width: 100%;
+  border: 1px solid silver;
+}
+@media (max-width: 600px){
+  .services-header {
+    height: 36px;
+    font-size: 28px;
+  }
+  .artist-service {
+    width: 60%;
+  }
+}
+@media (max-width: 900px) {
+  .artist-services-div {
+    flex-direction: column;
+  }
+}

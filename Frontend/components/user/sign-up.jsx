@@ -61,7 +61,7 @@ var SignUpPage = React.createClass({
               id="password"/>
           <br/>
           <div className="w-login-button">
-            <button className="btn w-l-button">SIGN UP
+            <button className="btn btn-info w-l-button">SIGN UP
             </button>
           </div>
           <div className="checkbox">

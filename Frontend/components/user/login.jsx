@@ -7,6 +7,9 @@ var React = require('react'),
   ClientAction = require('../../actions/clientAction.js');
 
 var Login = React.createClass({
+  signUpClick() {
+    hashHistory.push('/signup');
+  },
   render: function(){
     return (
       <div className="main-login">
@@ -14,7 +17,8 @@ var Login = React.createClass({
         <div className="login-body">
           <form className="name-form">
             <div className="login-h3">
-              <p className="login-header">Login</p>
+              <p className="login-header">Log In</p>
+              <a className="or-sign-up" onClick={this.signUpClick}>Or, Sign Up</a>
             </div>
             <br/>
               <input type="text"
@@ -31,7 +35,7 @@ var Login = React.createClass({
                 id="password"/>
             <br/>
             <div className="w-login-button">
-              <button className="btn w-l-button">LOG IN
+              <button className="btn w-l-button btn-info">LOG IN
               </button>
             </div>
             <div className="checkbox">

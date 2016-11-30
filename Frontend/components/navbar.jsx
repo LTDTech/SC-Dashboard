@@ -13,6 +13,12 @@ var NavBar = React.createClass({
     signUpClick() {
       hashHistory.push('/signup');
     },
+    servicesClick() {
+      hashHistory.push('/services');
+    },
+    aboutClick() {
+      hashHistory.push('/about');
+    },
   render: function(){
     return (
       <div className="mainNav">
@@ -32,9 +38,9 @@ var NavBar = React.createClass({
               </a>
               <a className="loginLink navbar-brand" onClick={this.signUpClick}>SIGN UP
               </a>
-              <a className="loginLink navbar-brand" onClick={this.loginClick}>SERVICES
+              <a className="loginLink navbar-brand" onClick={this.servicesClick}>SERVICES
               </a>
-              <a className="loginLink navbar-brand" onClick={this.loginClick}>ABOUT
+              <a className="loginLink navbar-brand" onClick={this.aboutClick}>ABOUT
               </a>
             </div>
             <div className="btn-group navButton">

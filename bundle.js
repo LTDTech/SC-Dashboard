@@ -52,8 +52,10 @@
 	    LandingPage = __webpack_require__(236),
 	    App = __webpack_require__(262),
 	    ScDash = __webpack_require__(263),
-	    Login = __webpack_require__(273),
-	    SignUpPage = __webpack_require__(275);
+	    Login = __webpack_require__(271),
+	    Services = __webpack_require__(273),
+	    About = __webpack_require__(274),
+	    SignUpPage = __webpack_require__(272);
 	
 	// import { CLIENT_ID, REDIRECT_URI } from './constants/auth';
 	
@@ -72,7 +74,9 @@
 	    React.createElement(IndexRoute, { component: LandingPage }),
 	    React.createElement(Route, { path: 'dashboard', component: ScDash }),
 	    React.createElement(Route, { path: 'login', component: Login }),
-	    React.createElement(Route, { path: 'signup', component: SignUpPage })
+	    React.createElement(Route, { path: 'signup', component: SignUpPage }),
+	    React.createElement(Route, { path: 'services', component: Services }),
+	    React.createElement(Route, { path: 'about', component: About })
 	  )
 	);
 	
@@ -29216,14 +29220,15 @@
 	    ReactDOM = __webpack_require__(34),
 	    NavBar = __webpack_require__(264),
 	    Footer = __webpack_require__(244),
-	    SideNavBar = __webpack_require__(272),
-	    AllTracks = __webpack_require__(266),
-	    AllFollowers = __webpack_require__(268),
-	    UserPanel = __webpack_require__(270),
-	    GeoMap = __webpack_require__(271),
-	    Login = __webpack_require__(273),
-	    SignUpPage = __webpack_require__(275),
-	    Follower = __webpack_require__(269);
+	    AllTracks = __webpack_require__(265),
+	    AllFollowers = __webpack_require__(267),
+	    UserPanel = __webpack_require__(269),
+	    GeoMap = __webpack_require__(270),
+	    Login = __webpack_require__(271),
+	    SignUpPage = __webpack_require__(272),
+	    Services = __webpack_require__(273),
+	    About = __webpack_require__(274),
+	    Follower = __webpack_require__(268);
 	
 	var App = React.createClass({
 	  displayName: 'App',
@@ -29252,13 +29257,13 @@
 	    Navbar = __webpack_require__(264),
 	    SessionStore = __webpack_require__(245),
 	    Footer = __webpack_require__(244),
-	    AllTracks = __webpack_require__(266),
-	    Track = __webpack_require__(267),
-	    AllFollowers = __webpack_require__(268),
-	    Follower = __webpack_require__(269),
-	    UserPanel = __webpack_require__(270),
+	    AllTracks = __webpack_require__(265),
+	    Track = __webpack_require__(266),
+	    AllFollowers = __webpack_require__(267),
+	    Follower = __webpack_require__(268),
+	    UserPanel = __webpack_require__(269),
 	    ClientAction = __webpack_require__(237),
-	    GeoMap = __webpack_require__(271),
+	    GeoMap = __webpack_require__(270),
 	    LandingPage = __webpack_require__(236);
 	
 	var ScDash = React.createClass({
@@ -29268,11 +29273,13 @@
 	    return { user: SessionStore.user(),
 	      username: SessionStore.getUsername() };
 	  },
-	
 	  componentDidMount: function () {
 	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
 	    ClientAction.getUserInfo(this.state.username);
 	    ClientAction.getFollowers(this.state.username);
+	    $(function () {
+	      $('.map').vectorMap({ map: 'us_aea' });
+	    });
 	  },
 	  componentWillUnmount: function () {
 	    this.sessionStoreListener.remove();
@@ -29366,6 +29373,12 @@
 	  signUpClick() {
 	    hashHistory.push('/signup');
 	  },
+	  servicesClick() {
+	    hashHistory.push('/services');
+	  },
+	  aboutClick() {
+	    hashHistory.push('/about');
+	  },
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -29412,12 +29425,12 @@
 	            ),
 	            React.createElement(
 	              'a',
-	              { className: 'loginLink navbar-brand', onClick: this.loginClick },
+	              { className: 'loginLink navbar-brand', onClick: this.servicesClick },
 	              'SERVICES'
 	            ),
 	            React.createElement(
 	              'a',
-	              { className: 'loginLink navbar-brand', onClick: this.loginClick },
+	              { className: 'loginLink navbar-brand', onClick: this.aboutClick },
 	              'ABOUT'
 	            )
 	          ),
@@ -29471,14 +29484,13 @@
 	module.exports = NavBar;
 
 /***/ },
-/* 265 */,
-/* 266 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(34),
 	    ClientAction = __webpack_require__(237),
-	    Track = __webpack_require__(267),
+	    Track = __webpack_require__(266),
 	    SessionStore = __webpack_require__(245);
 	
 	var AllTracks = React.createClass({
@@ -29516,7 +29528,7 @@
 	module.exports = AllTracks;
 
 /***/ },
-/* 267 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -29612,15 +29624,15 @@
 	module.exports = Track;
 
 /***/ },
-/* 268 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(34),
 	    ClientAction = __webpack_require__(237),
-	    Track = __webpack_require__(267),
+	    Track = __webpack_require__(266),
 	    SessionStore = __webpack_require__(245),
-	    Follower = __webpack_require__(269);
+	    Follower = __webpack_require__(268);
 	
 	var AllFollowers = React.createClass({
 	  displayName: 'AllFollowers',
@@ -29658,13 +29670,13 @@
 	module.exports = AllFollowers;
 
 /***/ },
-/* 269 */
+/* 268 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
 	    ReactDOM = __webpack_require__(34),
 	    ClientAction = __webpack_require__(237),
-	    Track = __webpack_require__(267),
+	    Track = __webpack_require__(266),
 	    SessionStore = __webpack_require__(245);
 	
 	var Follower = React.createClass({
@@ -29714,7 +29726,7 @@
 	module.exports = Follower;
 
 /***/ },
-/* 270 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -29778,7 +29790,7 @@
 	module.exports = UserPanel;
 
 /***/ },
-/* 271 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -29799,75 +29811,7 @@
 	module.exports = GeoMap;
 
 /***/ },
-/* 272 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    LandingPage = __webpack_require__(236);
-	
-	var SideNavBar = React.createClass({
-	  displayName: 'SideNavBar',
-	
-	  getInitialState: function () {
-	    return { loggedIn: false };
-	  }, insightsClick: function () {
-	    console.log("going to insights");
-	    hashHistory.push('/insights');
-	  },
-	  dashboardClick: function () {
-	    console.log("going to dashboard");
-	    hashHistory.push('/dashboard');
-	  },
-	  render: function () {
-	    return React.createElement(
-	      'nav',
-	      { className: 'navbar navbar-default' },
-	      React.createElement(
-	        'div',
-	        { className: 'container-fluid leftNav' },
-	        React.createElement(
-	          'button',
-	          { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
-	          React.createElement(
-	            'span',
-	            { className: 'sr-only' },
-	            'Toggle navigation'
-	          ),
-	          React.createElement('span', { className: 'icon-bar' }),
-	          React.createElement('span', { className: 'icon-bar' }),
-	          React.createElement('span', { className: 'icon-bar' })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-brand nav nav-tabs nav-stacked hover', onClick: this.dashboardClick },
-	          'Dashboard'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-brand nav nav-tabs nav-stacked hover' },
-	          'Login/Signup'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-brand nav nav-tabs nav-stacked hover', onClick: this.insightsClick },
-	          'Insights'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-brand nav nav-tabs nav-stacked class:hover' },
-	          'Brand'
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = SideNavBar;
-
-/***/ },
-/* 273 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -29881,6 +29825,9 @@
 	var Login = React.createClass({
 	  displayName: 'Login',
 	
+	  signUpClick() {
+	    hashHistory.push('/signup');
+	  },
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -29898,7 +29845,12 @@
 	            React.createElement(
 	              'p',
 	              { className: 'login-header' },
-	              'Login'
+	              'Log In'
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'or-sign-up', onClick: this.signUpClick },
+	              'Or, Sign Up'
 	            )
 	          ),
 	          React.createElement('br', null),
@@ -29920,7 +29872,7 @@
 	            { className: 'w-login-button' },
 	            React.createElement(
 	              'button',
-	              { className: 'btn w-l-button' },
+	              { className: 'btn w-l-button btn-info' },
 	              'LOG IN'
 	            )
 	          ),
@@ -29949,8 +29901,7 @@
 	module.exports = Login;
 
 /***/ },
-/* 274 */,
-/* 275 */
+/* 272 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1),
@@ -30033,7 +29984,7 @@
 	            { className: 'w-login-button' },
 	            React.createElement(
 	              'button',
-	              { className: 'btn w-l-button' },
+	              { className: 'btn btn-info w-l-button' },
 	              'SIGN UP'
 	            )
 	          ),
@@ -30060,6 +30011,139 @@
 	});
 	
 	module.exports = SignUpPage;
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    Navbar = __webpack_require__(264),
+	    SessionStore = __webpack_require__(245),
+	    Footer = __webpack_require__(244),
+	    ClientAction = __webpack_require__(237);
+	
+	var Services = React.createClass({
+	  displayName: 'Services',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-services' },
+	      React.createElement(Navbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'services-body' },
+	        React.createElement(
+	          'div',
+	          { className: 'services-h-pic' },
+	          React.createElement('img', { src: '' })
+	        ),
+	        React.createElement(
+	          'h1',
+	          { className: 'services-header' },
+	          'Artist Services'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'artist-services-div' },
+	          React.createElement(
+	            'div',
+	            { className: 'artist-service' },
+	            React.createElement(
+	              'h5',
+	              null,
+	              'Fan Retention'
+	            ),
+	            React.createElement(
+	              'p',
+	              { className: 'service-text' },
+	              'It can be hard to manage retaining and engaging your current fans while also expanding your growing fanbase. We can help you utilize data to create a clear path to growth.'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'artist-service' },
+	            React.createElement(
+	              'h5',
+	              null,
+	              'Awareness'
+	            ),
+	            React.createElement(
+	              'p',
+	              { className: 'service-text' },
+	              '"Build and they will come" doesn\'t work always in this current oversaturated market. Focus on your creating quality music and let us handle getting it into the right ears.'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'artist-service' },
+	            React.createElement(
+	              'h5',
+	              null,
+	              'Revenue'
+	            ),
+	            React.createElement(
+	              'p',
+	              { className: 'service-text' },
+	              'Are you still working a job that is getting in the way of you creating and performing? \u201CStarving artist\u201D is a phase, not a lifestyle. Let\u2019s create a plan on how we can make performing and creating your 9 to 5.'
+	            )
+	          )
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = Services;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    Navbar = __webpack_require__(264),
+	    SessionStore = __webpack_require__(245),
+	    Footer = __webpack_require__(244),
+	    ClientAction = __webpack_require__(237);
+	
+	var About = React.createClass({
+	  displayName: 'About',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-about' },
+	      React.createElement(Navbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'about-body' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'About Page'
+	        ),
+	        React.createElement('div', { className: 'about-pic' }),
+	        React.createElement(
+	          'div',
+	          { className: 'about-text' },
+	          React.createElement(
+	            'p',
+	            null,
+	            ' Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text.'
+	          )
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = About;
 
 /***/ }
 /******/ ]);

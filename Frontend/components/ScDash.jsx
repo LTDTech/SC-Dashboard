@@ -17,12 +17,14 @@ var ScDash = React.createClass({
   getInitialState: function() {
     return {user: SessionStore.user(),
     username: SessionStore.getUsername()};
-  }
-  ,
+  },
   componentDidMount: function() {
     this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
     ClientAction.getUserInfo(this.state.username);
     ClientAction.getFollowers(this.state.username);
+    $(function(){
+      $('.map').vectorMap({map: 'us_aea'});
+    });
   },
   componentWillUnmount: function() {
     this.sessionStoreListener.remove();

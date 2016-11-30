@@ -4,7 +4,7 @@
 }
 
 .signup-body {
-  width: 70%;
+  width: 75%;
   min-height: 700px;
   display: flex;
   justify-content: center;
@@ -14,7 +14,7 @@
 }
 .signup-form {
   width: 300px;
-  height: 600px;
+  height: 603px;
   border: 1px solid silver;
   border-radius: 7px;
   background-color: #E9EBEE;
