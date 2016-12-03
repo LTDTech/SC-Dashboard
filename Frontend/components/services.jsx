@@ -13,7 +13,7 @@ var Services = React.createClass({
         <Navbar/>
         <div className="services-body">
           <div className="services-h-pic">
-            <img src=""/>
+            <img className="header-pic" src="../img/musicstudio.jpeg"/>
           </div>
           <h1 className="services-header">Artist Services
           </h1>
@@ -27,7 +27,7 @@ var Services = React.createClass({
             <div className="artist-service">
               <h5>Awareness
               </h5>
-              <p className="service-text">"Build and they will come" doesn't work always in this current oversaturated market. Focus on your creating quality music and let us handle getting it into the right ears.
+              <p className="service-text">"Build and they will come" does not work always in this current oversaturated market. Focus on your creating quality music and let us handle getting it into the right ears.
               </p>
             </div>
             <div className="artist-service">

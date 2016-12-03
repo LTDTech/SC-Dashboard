@@ -30038,7 +30038,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'services-h-pic' },
-	          React.createElement('img', { src: '' })
+	          React.createElement('img', { className: 'header-pic', src: '../img/musicstudio.jpeg' })
 	        ),
 	        React.createElement(
 	          'h1',
@@ -30073,7 +30073,7 @@
 	            React.createElement(
 	              'p',
 	              { className: 'service-text' },
-	              '"Build and they will come" doesn\'t work always in this current oversaturated market. Focus on your creating quality music and let us handle getting it into the right ears.'
+	              '"Build and they will come" does not work always in this current oversaturated market. Focus on your creating quality music and let us handle getting it into the right ears.'
 	            )
 	          ),
 	          React.createElement(

@@ -48,9 +48,15 @@ h5 {
   margin-top: 20px;
 }
 .services-h-pic {
-  height: 250px;
+  height: 300px;
   width: 100%;
-  border: 1px solid silver;
+  /*background-image: url("../../img/musicstudio.jpeg");
+  background-size: cover;
+  background-repeat: no-repeat;*/
+}
+.header-pic {
+  height: 100%;
+  width: 100%;
 }
 @media (max-width: 600px){
   .services-header {
@@ -59,6 +65,9 @@ h5 {
   }
   .artist-service {
     width: 60%;
+  }
+  .services-h-pic {
+    height: 150px;
   }
 }
 @media (max-width: 900px) {
