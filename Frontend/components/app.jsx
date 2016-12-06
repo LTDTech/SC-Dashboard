@@ -14,6 +14,7 @@ var React = require('react'),
   SignUpPage = require('./user/sign-up'),
   Services = require('./services'),
   About = require('./about'),
+  Team = require('./team'),
   Follower = require('./follower');
 
 var App = React.createClass({

@@ -55,6 +55,7 @@
 	    Login = __webpack_require__(271),
 	    Services = __webpack_require__(273),
 	    About = __webpack_require__(274),
+	    Team = __webpack_require__(275),
 	    SignUpPage = __webpack_require__(272);
 	
 	// import { CLIENT_ID, REDIRECT_URI } from './constants/auth';
@@ -76,7 +77,8 @@
 	    React.createElement(Route, { path: 'login', component: Login }),
 	    React.createElement(Route, { path: 'signup', component: SignUpPage }),
 	    React.createElement(Route, { path: 'services', component: Services }),
-	    React.createElement(Route, { path: 'about', component: About })
+	    React.createElement(Route, { path: 'about', component: About }),
+	    React.createElement(Route, { path: 'team', component: Team })
 	  )
 	);
 	
@@ -29270,6 +29272,7 @@
 	    SignUpPage = __webpack_require__(272),
 	    Services = __webpack_require__(273),
 	    About = __webpack_require__(274),
+	    Team = __webpack_require__(275),
 	    Follower = __webpack_require__(268);
 	
 	var App = React.createClass({
@@ -29421,6 +29424,9 @@
 	  aboutClick() {
 	    hashHistory.push('/about');
 	  },
+	  teamClick() {
+	    hashHistory.push('/team');
+	  },
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -29474,6 +29480,11 @@
 	              'a',
 	              { className: 'loginLink navbar-brand', onClick: this.aboutClick },
 	              'ABOUT'
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'loginLink navbar-brand', onClick: this.teamClick },
+	              'TEAM'
 	            )
 	          ),
 	          React.createElement(
@@ -30187,6 +30198,52 @@
 	});
 	
 	module.exports = About;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    Navbar = __webpack_require__(264),
+	    SessionStore = __webpack_require__(245),
+	    Footer = __webpack_require__(244),
+	    ClientAction = __webpack_require__(237);
+	
+	var Team = React.createClass({
+	  displayName: 'Team',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-about' },
+	      React.createElement(Navbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'about-body' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'Team Page'
+	        ),
+	        React.createElement('div', { className: 'about-pic' }),
+	        React.createElement(
+	          'div',
+	          { className: 'about-text' },
+	          React.createElement(
+	            'p',
+	            null,
+	            ' Filler Text.'
+	          )
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = Team;
 
 /***/ }
 /******/ ]);

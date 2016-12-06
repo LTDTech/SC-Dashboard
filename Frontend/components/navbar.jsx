@@ -19,6 +19,9 @@ var NavBar = React.createClass({
     aboutClick() {
       hashHistory.push('/about');
     },
+    teamClick() {
+      hashHistory.push('/team');
+    },
   render: function(){
     return (
       <div className="mainNav">
@@ -41,6 +44,8 @@ var NavBar = React.createClass({
               <a className="loginLink navbar-brand" onClick={this.servicesClick}>SERVICES
               </a>
               <a className="loginLink navbar-brand" onClick={this.aboutClick}>ABOUT
+              </a>
+              <a className="loginLink navbar-brand" onClick={this.teamClick}>TEAM
               </a>
             </div>
             <div className="btn-group navButton">

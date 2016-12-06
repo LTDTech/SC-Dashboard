@@ -9,6 +9,7 @@ var Insights = require('./components/insights'),
   Login = require('./components/user/login'),
   Services = require('./components/services'),
   About = require('./components/about'),
+  Team = require('./components/team'),
   SignUpPage = require('./components/user/sign-up');
 
 // import { CLIENT_ID, REDIRECT_URI } from './constants/auth';
@@ -29,6 +30,7 @@ var Insights = require('./components/insights'),
         <Route path="signup" component={SignUpPage}/>
         <Route path="services" component={Services}/>
         <Route path="about" component={About}/>
+        <Route path="team" component={Team}/>
       </Route>
     </Router>
   );
