@@ -31,5 +31,11 @@ module.exports = {
       actionType: "receivedUserInfo",
       data: userData
     });
-  }
+  },
+  loginUser: function (user) {
+    Dispatcher.dispatch({
+      actionType: "userLogin",
+      user: user
+    });
+  },
 };

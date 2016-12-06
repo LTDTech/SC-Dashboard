@@ -20,6 +20,9 @@ var React = require('react'),
       onSessionChange: function() {
         this.setState({tracks: SessionStore.tracks()});
       },
+      convertWaveForm (old_waveform) {
+        return old_waveform.replace(/(wis)/i, 'w1').replace(/(json)/i,'png');
+      },
     render: function(){
       var renderTracks = [];
       var that = this;

@@ -10,6 +10,10 @@ var Login = React.createClass({
   signUpClick() {
     hashHistory.push('/signup');
   },
+  loginClick() {
+    // var data = {"username": this.state.username, "password": this.state.password};
+    // clienAction.userLogin(data);
+  },
   render: function(){
     return (
       <div className="main-login">
@@ -23,19 +27,17 @@ var Login = React.createClass({
             <br/>
               <input type="text"
                 className="w-form-textbox w-un-Input"
-                // value={this.state.username}
-                // onChange={this.onChange}
+
                 placeholder="Email"
                 id="email" />
               <input type="text"
                 className="w-form-textbox w-pw-Input"
-                // value={this.state.password}
-                // onChange={this.onChange}
+
                 placeholder="Password"
                 id="password"/>
             <br/>
             <div className="w-login-button">
-              <button className="btn w-l-button btn-info">LOG IN
+              <button onClick={this.loginClick} className="btn w-l-button btn-info">LOG IN
               </button>
             </div>
             <div className="checkbox">

@@ -26,13 +26,13 @@ var React = require('react'),
               <div className="track-likes">
                 <p className="track-text">Likes</p>
                 <div className="track-react">
-                  {this.props.track.favoritings_count}
+                  {this.props.track.likes_count}
                 </div>
               </div>
               <div className="track-reposts">
-                <img className="repost-img" src="../img/reposticon.png"/>
+                <img className="repost-img" src="./img/reposticon.png"/>
                 <div className="track-react">
-                  <p>#</p>
+                  {this.props.track.reposts_count}
                 </div>
               </div>
             </div>

@@ -14,5 +14,8 @@ module.exports = {
   },
   getUserInfo: function(username) {
     UserApi.getUserInfo(username);
+  },
+  userLogin: function(data) {
+    UserApi.userLogin(data);
   }
 };

@@ -7,32 +7,44 @@ var SessionStore = new Store(Dispatcher);
 var _username = JSON.parse(myStorage.getItem("userName"));
 var _authenticationErrors = [];
 var _loggedIn = false;
+var _waveformUrl = JSON.parse(myStorage.getItem("waveform_url"));
 
 var _tracks = [];
 var _followers = [];
-var _user = [];
+var _user = {};
 
 SessionStore.setUser = function (name) {
   myStorage.setItem("userName", JSON.stringify(name));
   _username = name;
-}
-
+};
+SessionStore.setWaveform = function (waveform_url) {
+  myStorage.setItem("waveform_url");
+  _waveformUrl = waveform_url;
+};
 SessionStore.tracks = function () {
   return _tracks;
-}
+};
 SessionStore.followers = function () {
   return _followers;
-}
+};
 SessionStore.user = function () {
   return _user;
-}
+};
 SessionStore.getUsername = function () {
   if (myStorage.getItem("userName") === "false"){
     return null;
   } else {
     return _username;
   }
-}
+};
+var loginUser = function(user) {
+  _currentUser = user;
+  myStorage.setItem("currentUser", JSON.stringify(user));
+  _loggedIn = true;
+  clearErrors();
+  SessionStore.__emitChange();
+};
+
 var receivedFollowers = function(receivedFollowers) {
   _followers = receivedFollowers;
   SessionStore.__emitChange();

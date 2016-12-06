@@ -13,7 +13,7 @@ var Services = React.createClass({
         <Navbar/>
         <div className="services-body">
           <div className="services-h-pic">
-            <img className="header-pic" src="../img/musicstudio.jpeg"/>
+            <img className="header-pic" src="./img/musicstudio.jpeg"/>
           </div>
           <h1 className="services-header">Artist Services
           </h1>

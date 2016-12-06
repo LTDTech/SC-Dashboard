@@ -30,7 +30,7 @@ var NavBar = React.createClass({
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <a onClick={this.logoClick} className="logo"><img className="logo" src='../img/wysidio.jpg'></img></a>
+              <a onClick={this.logoClick} className="logo"><img className="logo" src='./img/wysidio.jpg'></img></a>
           </div>
           <div className="topNavRight">
             <div>
@@ -45,7 +45,7 @@ var NavBar = React.createClass({
             </div>
             <div className="btn-group navButton">
               <button type="button" className="navButton btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img className="userPro navButton" src='../img/userprofilepic.jpg'></img><span className="caret"></span>
+                <img className="userPro navButton" src='./img/userprofilepic.jpg'></img><span className="caret"></span>
               </button>
               <ul className="dropdown-menu">
                 <li><a href="#">Login</a></li>

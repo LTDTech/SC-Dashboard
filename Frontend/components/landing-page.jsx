@@ -18,7 +18,7 @@ var LandingPage = React.createClass({
       <div className="mainLand">
         <div className="scLogin">
           <div className="login-contents">
-            <img className="land-logo" src="../img/wysidio.jpg"></img>
+            <img className="land-logo" src="./img/wysidio.jpg"></img>
           </div>
           <div className="sc-name-input">
             <form className="sc-name-form">
@@ -33,7 +33,7 @@ var LandingPage = React.createClass({
             </form>
             <button className="scButton" onClick={this.getUserData}>
               <div className="scButton2">
-                <img className="scIcon scButton3" src="../img/scicon4.png"></img>
+                <img className="scIcon scButton3" src="./img/scicon4.png"></img>
                 <h3 className="get-started">Get Started</h3>
               </div>
             </button>

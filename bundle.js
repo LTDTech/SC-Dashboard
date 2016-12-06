@@ -27164,7 +27164,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'login-contents' },
-	          React.createElement('img', { className: 'land-logo', src: '../img/wysidio.jpg' })
+	          React.createElement('img', { className: 'land-logo', src: './img/wysidio.jpg' })
 	        ),
 	        React.createElement(
 	          'div',
@@ -27187,7 +27187,7 @@
 	            React.createElement(
 	              'div',
 	              { className: 'scButton2' },
-	              React.createElement('img', { className: 'scIcon scButton3', src: '../img/scicon4.png' }),
+	              React.createElement('img', { className: 'scIcon scButton3', src: './img/scicon4.png' }),
 	              React.createElement(
 	                'h3',
 	                { className: 'get-started' },
@@ -27222,6 +27222,9 @@
 	  },
 	  getUserInfo: function (username) {
 	    UserApi.getUserInfo(username);
+	  },
+	  userLogin: function (data) {
+	    UserApi.userLogin(data);
 	  }
 	};
 
@@ -27552,7 +27555,7 @@
 	module.exports = {
 	  getUserData: function (name) {
 	    $.ajax({
-	      url: 'http://sc.wysidio.com/sc/get/filtered/' + name,
+	      url: 'http://sc.wysidio.com/api/validate/' + name,
 	      method: 'GET',
 	      success: function (receivedUser) {
 	        hashHistory.push('dashboard');
@@ -27565,10 +27568,18 @@
 	  },
 	  getTracks: function (name) {
 	    $.ajax({
-	      url: 'http://sc.wysidio.com/sc/get/filtered/tracks/' + name,
+	      url: 'http://sc.wysidio.com/api/get/' + name + '/tracks/filter/v/1/1',
 	      method: 'GET',
 	      success: function (returnTracks) {
-	        ServerAction.receivedTracks(returnTracks);
+	        var filteredTracks = [];
+	        function convertWaveForm(old_waveform) {
+	          return old_waveform.replace(/(wis)/i, 'w1').replace(/(json)/i, 'png');
+	        };
+	        returnTracks.forEach(function (track) {
+	          track.waveform_url = convertWaveForm(track.waveform_url);
+	          filteredTracks.push(track);
+	        });
+	        ServerAction.receivedTracks(filteredTracks);
 	      },
 	      error: function (error) {
 	        console.log(error.statusCode());
@@ -27577,7 +27588,7 @@
 	  },
 	  getFollowers: function (name) {
 	    $.ajax({
-	      url: 'http://sc.wysidio.com/sc/get/filtered/followers/' + name,
+	      url: 'http://sc.wysidio.com/api/get/' + name + '/followersfifty/filter/v/1',
 	      method: 'GET',
 	      success: function (receivedFollowers) {
 	        ServerAction.receivedFollowers(receivedFollowers);
@@ -27589,7 +27600,7 @@
 	  },
 	  getUserInfo: function (name) {
 	    $.ajax({
-	      url: 'http://sc.wysidio.com/sc/get/filtered/' + name,
+	      url: 'http://sc.wysidio.com/api/get/' + name + '/filter/v/1',
 	      method: 'GET',
 	      success: function (userInfo) {
 	        ServerAction.receivedUserInfo(userInfo);
@@ -27597,6 +27608,19 @@
 	      },
 	      error: function (error) {
 	        console.log(error.statusCode());
+	      }
+	    });
+	  },
+	  userLogin: function (data) {
+	    $.ajax({
+	      url: 'api/users',
+	      method: 'POST',
+	      success: function (data) {
+	        ServerActions.loginUser(data);
+	        hashHistory.push('/dashboard');
+	      },
+	      error: function (error) {
+	        ServerActions.receiveError("error logging in");
 	      }
 	    });
 	  }
@@ -27639,6 +27663,12 @@
 	      actionType: "receivedUserInfo",
 	      data: userData
 	    });
+	  },
+	  loginUser: function (user) {
+	    Dispatcher.dispatch({
+	      actionType: "userLogin",
+	      user: user
+	    });
 	  }
 	};
 
@@ -27670,7 +27700,7 @@
 	          React.createElement(
 	            'div',
 	            { className: 'footer-logo-div' },
-	            React.createElement('img', { className: 'footer-logo', src: '../img/wysidio.jpg' })
+	            React.createElement('img', { className: 'footer-logo', src: './img/wysidio.jpg' })
 	          )
 	        )
 	      )
@@ -27693,16 +27723,20 @@
 	var _username = JSON.parse(myStorage.getItem("userName"));
 	var _authenticationErrors = [];
 	var _loggedIn = false;
+	var _waveformUrl = JSON.parse(myStorage.getItem("waveform_url"));
 	
 	var _tracks = [];
 	var _followers = [];
-	var _user = [];
+	var _user = {};
 	
 	SessionStore.setUser = function (name) {
 	  myStorage.setItem("userName", JSON.stringify(name));
 	  _username = name;
 	};
-	
+	SessionStore.setWaveform = function (waveform_url) {
+	  myStorage.setItem("waveform_url");
+	  _waveformUrl = waveform_url;
+	};
 	SessionStore.tracks = function () {
 	  return _tracks;
 	};
@@ -27719,6 +27753,14 @@
 	    return _username;
 	  }
 	};
+	var loginUser = function (user) {
+	  _currentUser = user;
+	  myStorage.setItem("currentUser", JSON.stringify(user));
+	  _loggedIn = true;
+	  clearErrors();
+	  SessionStore.__emitChange();
+	};
+	
 	var receivedFollowers = function (receivedFollowers) {
 	  _followers = receivedFollowers;
 	  SessionStore.__emitChange();
@@ -29404,7 +29446,7 @@
 	          React.createElement(
 	            'a',
 	            { onClick: this.logoClick, className: 'logo' },
-	            React.createElement('img', { className: 'logo', src: '../img/wysidio.jpg' })
+	            React.createElement('img', { className: 'logo', src: './img/wysidio.jpg' })
 	          )
 	        ),
 	        React.createElement(
@@ -29440,7 +29482,7 @@
 	            React.createElement(
 	              'button',
 	              { type: 'button', className: 'navButton btn btn-default dropdown-toggle', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
-	              React.createElement('img', { className: 'userPro navButton', src: '../img/userprofilepic.jpg' }),
+	              React.createElement('img', { className: 'userPro navButton', src: './img/userprofilepic.jpg' }),
 	              React.createElement('span', { className: 'caret' })
 	            ),
 	            React.createElement(
@@ -29510,6 +29552,9 @@
 	  },
 	  onSessionChange: function () {
 	    this.setState({ tracks: SessionStore.tracks() });
+	  },
+	  convertWaveForm(old_waveform) {
+	    return old_waveform.replace(/(wis)/i, 'w1').replace(/(json)/i, 'png');
 	  },
 	  render: function () {
 	    var renderTracks = [];
@@ -29592,21 +29637,17 @@
 	            React.createElement(
 	              'div',
 	              { className: 'track-react' },
-	              this.props.track.favoritings_count
+	              this.props.track.likes_count
 	            )
 	          ),
 	          React.createElement(
 	            'div',
 	            { className: 'track-reposts' },
-	            React.createElement('img', { className: 'repost-img', src: '../img/reposticon.png' }),
+	            React.createElement('img', { className: 'repost-img', src: './img/reposticon.png' }),
 	            React.createElement(
 	              'div',
 	              { className: 'track-react' },
-	              React.createElement(
-	                'p',
-	                null,
-	                '#'
-	              )
+	              this.props.track.reposts_count
 	            )
 	          )
 	        ),
@@ -29828,6 +29869,10 @@
 	  signUpClick() {
 	    hashHistory.push('/signup');
 	  },
+	  loginClick() {
+	    // var data = {"username": this.state.username, "password": this.state.password};
+	    // clienAction.userLogin(data);
+	  },
 	  render: function () {
 	    return React.createElement(
 	      'div',
@@ -29855,16 +29900,14 @@
 	          ),
 	          React.createElement('br', null),
 	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-un-Input'
-	            // value={this.state.username}
-	            // onChange={this.onChange}
-	            , placeholder: 'Email',
+	            className: 'w-form-textbox w-un-Input',
+	
+	            placeholder: 'Email',
 	            id: 'email' }),
 	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-pw-Input'
-	            // value={this.state.password}
-	            // onChange={this.onChange}
-	            , placeholder: 'Password',
+	            className: 'w-form-textbox w-pw-Input',
+	
+	            placeholder: 'Password',
 	            id: 'password' }),
 	          React.createElement('br', null),
 	          React.createElement(
@@ -29872,7 +29915,7 @@
 	            { className: 'w-login-button' },
 	            React.createElement(
 	              'button',
-	              { className: 'btn w-l-button btn-info' },
+	              { onClick: this.loginClick, className: 'btn w-l-button btn-info' },
 	              'LOG IN'
 	            )
 	          ),
@@ -30038,7 +30081,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'services-h-pic' },
-	          React.createElement('img', { className: 'header-pic', src: '../img/musicstudio.jpeg' })
+	          React.createElement('img', { className: 'header-pic', src: './img/musicstudio.jpeg' })
 	        ),
 	        React.createElement(
 	          'h1',
