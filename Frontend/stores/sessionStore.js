@@ -12,6 +12,8 @@ var _waveformUrl = JSON.parse(myStorage.getItem("waveform_url"));
 var _tracks = [];
 var _followers = [];
 var _user = {};
+var _coordinates = [];
+var _unknownFollowers = 0;
 
 SessionStore.setUser = function (name) {
   myStorage.setItem("userName", JSON.stringify(name));
@@ -37,6 +39,27 @@ SessionStore.getUsername = function () {
     return _username;
   }
 };
+SessionStore.releaseFollowers = function () {
+  return _coordinates;
+};
+
+SessionStore.unknownFollowers = function () {
+  _unknownFollowers = _unknownFollowers + 1;
+};
+
+var getCoordinates = function(followers) {
+  followers.forEach(function(follower){
+    $.ajax({url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + follower.city + "key=AIzaSyCpZ5r-c6NA8hvSW_w90FPprl48G6O5JdM",
+    success: function(coordinates) {
+      _coordinates.push(JSON.parse.coordinates);
+    },
+    error: function(uncoordinated) {
+      SessionStore.unknownFollowers(uncoordinated);
+    }});
+  });
+  SessionStore.__emitChange();
+};
+
 var loginUser = function(user) {
   _currentUser = user;
   myStorage.setItem("currentUser", JSON.stringify(user));
@@ -48,6 +71,7 @@ var loginUser = function(user) {
 var receivedFollowers = function(receivedFollowers) {
   _followers = receivedFollowers;
   SessionStore.__emitChange();
+  getCoordinates(_followers);
 };
 
 var receivedTracks = function(receivedTracks) {

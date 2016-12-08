@@ -3,7 +3,7 @@ var ServerAction = require('../actions/serverAction.js');
 module.exports = {
   getUserData: function(name) {
     $.ajax({
-      url: 'http://sc.wysidio.com/api/validate/' + name,
+      url: 'https://sc.ltd-brands.com/api/validate/' + name,
       method: 'GET',
       success: function(receivedUser) {
         hashHistory.push('dashboard');
@@ -16,7 +16,7 @@ module.exports = {
   },
   getTracks: function(name) {
     $.ajax({
-      url: 'http://sc.wysidio.com/api/get/' + name + '/tracks/filter/v/1/1',
+      url: 'https://sc.ltd-brands.com/api/get/' + name + '/tracks/filter/v/1/1',
       method: 'GET',
       success: function(returnTracks) {
         var filteredTracks = [];
@@ -36,7 +36,7 @@ module.exports = {
   },
   getFollowers: function(name) {
     $.ajax({
-      url: 'http://sc.wysidio.com/api/get/' + name + '/followersfifty/filter/v/1',
+      url: 'https://sc.ltd-brands.com/api/get/' + name + '/followersfifty/filter/v/1',
       method: 'GET',
       success: function(receivedFollowers) {
         ServerAction.receivedFollowers(receivedFollowers);
@@ -48,7 +48,7 @@ module.exports = {
   },
   getUserInfo: function(name) {
     $.ajax({
-      url: 'http://sc.wysidio.com/api/get/' + name + '/filter/v/1',
+      url: 'https://sc.ltd-brands.com/api/get/' + name + '/filter/v/1',
       method: 'GET',
       success: function(userInfo) {
         ServerAction.receivedUserInfo(userInfo);
