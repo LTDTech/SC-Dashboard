@@ -34,7 +34,7 @@
 /******/ 	__webpack_require__.c = installedModules;
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "/Frontend/";
+/******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(0);
@@ -50,13 +50,13 @@
 	
 	var Insights = __webpack_require__(172),
 	    LandingPage = __webpack_require__(236),
-	    App = __webpack_require__(246),
-	    ScDash = __webpack_require__(247),
-	    Login = __webpack_require__(255),
-	    Services = __webpack_require__(257),
-	    About = __webpack_require__(258),
-	    Team = __webpack_require__(259),
-	    SignUpPage = __webpack_require__(256);
+	    App = __webpack_require__(262),
+	    ScDash = __webpack_require__(263),
+	    Login = __webpack_require__(271),
+	    Services = __webpack_require__(273),
+	    About = __webpack_require__(274),
+	    Team = __webpack_require__(275),
+	    SignUpPage = __webpack_require__(272);
 	
 	// import { CLIENT_ID, REDIRECT_URI } from './constants/auth';
 	
@@ -27557,7 +27557,7 @@
 	module.exports = {
 	  getUserData: function (name) {
 	    $.ajax({
-	      url: 'http://sc.wysidio.com/api/validate/' + name,
+	      url: 'https://sc.ltd-brands.com/api/validate/' + name,
 	      method: 'GET',
 	      success: function (receivedUser) {
 	        hashHistory.push('dashboard');
@@ -27570,7 +27570,7 @@
 	  },
 	  getTracks: function (name) {
 	    $.ajax({
-	      url: 'http://sc.wysidio.com/api/get/' + name + '/tracks/filter/v/1/1',
+	      url: 'https://sc.ltd-brands.com/api/get/' + name + '/tracks/filter/v/1/1',
 	      method: 'GET',
 	      success: function (returnTracks) {
 	        var filteredTracks = [];
@@ -27590,7 +27590,7 @@
 	  },
 	  getFollowers: function (name) {
 	    $.ajax({
-	      url: 'http://sc.wysidio.com/api/get/' + name + '/followersfifty/filter/v/1',
+	      url: 'https://sc.ltd-brands.com/api/get/' + name + '/followersfifty/filter/v/1',
 	      method: 'GET',
 	      success: function (receivedFollowers) {
 	        ServerAction.receivedFollowers(receivedFollowers);
@@ -27602,7 +27602,7 @@
 	  },
 	  getUserInfo: function (name) {
 	    $.ajax({
-	      url: 'http://sc.wysidio.com/api/get/' + name + '/filter/v/1',
+	      url: 'https://sc.ltd-brands.com/api/get/' + name + '/filter/v/1',
 	      method: 'GET',
 	      success: function (userInfo) {
 	        ServerAction.receivedUserInfo(userInfo);
@@ -27716,9 +27716,9 @@
 /* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Store = __webpack_require__(260).Store;
+	var Store = __webpack_require__(246).Store;
 	var Dispatcher = __webpack_require__(238);
-	var TrackConstants = __webpack_require__(275);
+	var TrackConstants = __webpack_require__(261);
 	var myStorage = localStorage;
 	var SessionStore = new Store(Dispatcher);
 	
@@ -27849,1004 +27849,6 @@
 /* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(1),
-	    ScDash = __webpack_require__(247),
-	    LandingPage = __webpack_require__(236),
-	    Insights = __webpack_require__(172),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    ReactDOM = __webpack_require__(34),
-	    NavBar = __webpack_require__(248),
-	    Footer = __webpack_require__(244),
-	    AllTracks = __webpack_require__(249),
-	    AllFollowers = __webpack_require__(251),
-	    UserPanel = __webpack_require__(253),
-	    GeoMap = __webpack_require__(254),
-	    Login = __webpack_require__(255),
-	    SignUpPage = __webpack_require__(256),
-	    Services = __webpack_require__(257),
-	    About = __webpack_require__(258),
-	    Team = __webpack_require__(259),
-	    Follower = __webpack_require__(252);
-	
-	var App = React.createClass({
-	  displayName: 'App',
-	
-	  getInitialState: function () {
-	    return { loggedIn: false };
-	  },
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'mainDiv' },
-	      this.props.children
-	    );
-	  }
-	});
-	
-	module.exports = App;
-
-/***/ },
-/* 247 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    Navbar = __webpack_require__(248),
-	    SessionStore = __webpack_require__(245),
-	    Footer = __webpack_require__(244),
-	    AllTracks = __webpack_require__(249),
-	    Track = __webpack_require__(250),
-	    AllFollowers = __webpack_require__(251),
-	    Follower = __webpack_require__(252),
-	    UserPanel = __webpack_require__(253),
-	    ClientAction = __webpack_require__(237),
-	    GeoMap = __webpack_require__(254),
-	    LandingPage = __webpack_require__(236);
-	
-	var ScDash = React.createClass({
-	  displayName: 'ScDash',
-	
-	  getInitialState: function () {
-	    return { user: SessionStore.user(),
-	      username: SessionStore.getUsername() };
-	  },
-	  componentDidMount: function () {
-	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
-	    ClientAction.getUserInfo(this.state.username);
-	    ClientAction.getFollowers(this.state.username);
-	    $(function () {
-	      $('.map').vectorMap({ map: 'us_aea' });
-	    });
-	  },
-	  componentWillUnmount: function () {
-	    this.sessionStoreListener.remove();
-	  },
-	  onSessionChange: function () {
-	    this.setState({ user: SessionStore.user() });
-	  },
-	  render: function () {
-	    var renderFollowers = [];
-	    var that = this;
-	    return React.createElement(
-	      'div',
-	      { className: 'main-Sc-Div' },
-	      React.createElement(Navbar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'dashHeader' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Your Dashboard'
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'follower-content' },
-	        React.createElement(
-	          'div',
-	          { className: 'account-data' },
-	          React.createElement(UserPanel, { user: this.state.user }),
-	          React.createElement(
-	            'div',
-	            { className: 'followers-title' },
-	            React.createElement(
-	              'h3',
-	              null,
-	              'Your Followers'
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'followers' },
-	            React.createElement(AllFollowers, null)
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'the-map' },
-	          React.createElement(GeoMap, null)
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'track-content-header' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Track Activity'
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'main-track-content' },
-	        React.createElement(AllTracks, null)
-	      ),
-	      React.createElement(Footer, null)
-	    );
-	  }
-	});
-	
-	module.exports = ScDash;
-
-/***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    LandingPage = __webpack_require__(236);
-	
-	var NavBar = React.createClass({
-	  displayName: 'NavBar',
-	
-	  loginClick() {
-	    hashHistory.push('/login');
-	  },
-	  logoClick() {
-	    hashHistory.push('/dashboard');
-	  },
-	  signUpClick() {
-	    hashHistory.push('/signup');
-	  },
-	  servicesClick() {
-	    hashHistory.push('/services');
-	  },
-	  aboutClick() {
-	    hashHistory.push('/about');
-	  },
-	  teamClick() {
-	    hashHistory.push('/team');
-	  },
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'mainNav' },
-	      React.createElement(
-	        'nav',
-	        { className: 'navbar navbar-default topNav' },
-	        React.createElement(
-	          'div',
-	          { className: 'navbar-header topNavLeft' },
-	          React.createElement(
-	            'button',
-	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
-	            React.createElement(
-	              'span',
-	              { className: 'sr-only' },
-	              'Toggle navigation'
-	            ),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' }),
-	            React.createElement('span', { className: 'icon-bar' })
-	          ),
-	          React.createElement(
-	            'a',
-	            { onClick: this.logoClick, className: 'logo' },
-	            React.createElement('img', { className: 'logo', src: './img/wysidio.jpg' })
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'topNavRight' },
-	          React.createElement(
-	            'div',
-	            null,
-	            React.createElement(
-	              'a',
-	              { className: 'loginLink navbar-brand', onClick: this.loginClick },
-	              'LOGIN'
-	            ),
-	            React.createElement(
-	              'a',
-	              { className: 'loginLink navbar-brand', onClick: this.signUpClick },
-	              'SIGN UP'
-	            ),
-	            React.createElement(
-	              'a',
-	              { className: 'loginLink navbar-brand', onClick: this.servicesClick },
-	              'SERVICES'
-	            ),
-	            React.createElement(
-	              'a',
-	              { className: 'loginLink navbar-brand', onClick: this.aboutClick },
-	              'ABOUT'
-	            ),
-	            React.createElement(
-	              'a',
-	              { className: 'loginLink navbar-brand', onClick: this.teamClick },
-	              'TEAM'
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'btn-group navButton' },
-	            React.createElement(
-	              'button',
-	              { type: 'button', className: 'navButton btn btn-default dropdown-toggle', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
-	              React.createElement('img', { className: 'userPro navButton', src: './img/userprofilepic.jpg' }),
-	              React.createElement('span', { className: 'caret' })
-	            ),
-	            React.createElement(
-	              'ul',
-	              { className: 'dropdown-menu' },
-	              React.createElement(
-	                'li',
-	                null,
-	                React.createElement(
-	                  'a',
-	                  { href: '#' },
-	                  'Login'
-	                )
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                React.createElement(
-	                  'a',
-	                  { href: '#' },
-	                  'Sign Up'
-	                )
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                React.createElement(
-	                  'a',
-	                  { href: '#' },
-	                  'Profile'
-	                )
-	              )
-	            )
-	          )
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = NavBar;
-
-/***/ },
-/* 249 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    ClientAction = __webpack_require__(237),
-	    Track = __webpack_require__(250),
-	    SessionStore = __webpack_require__(245);
-	
-	var AllTracks = React.createClass({
-	  displayName: 'AllTracks',
-	
-	  getInitialState: function () {
-	    return { tracks: SessionStore.tracks(),
-	      user: SessionStore.user(),
-	      username: SessionStore.getUsername() };
-	  },
-	  componentDidMount: function () {
-	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
-	    ClientAction.getTracks(this.state.username);
-	  },
-	  componentWillUnmount: function () {
-	    this.sessionStoreListener.remove();
-	  },
-	  onSessionChange: function () {
-	    this.setState({ tracks: SessionStore.tracks() });
-	  },
-	  convertWaveForm(old_waveform) {
-	    return old_waveform.replace(/(wis)/i, 'w1').replace(/(json)/i, 'png');
-	  },
-	  render: function () {
-	    var renderTracks = [];
-	    var that = this;
-	    this.state.tracks.forEach(function (track) {
-	      renderTracks.push(React.createElement(Track, { className: 'main-track', track: track, key: track.id }));
-	    });
-	    return React.createElement(
-	      'div',
-	      { className: 'all-tracks' },
-	      renderTracks
-	    );
-	  }
-	});
-	
-	module.exports = AllTracks;
-
-/***/ },
-/* 250 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    ClientAction = __webpack_require__(237),
-	    SessionStore = __webpack_require__(245);
-	
-	var Track = React.createClass({
-	  displayName: 'Track',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'main-track' },
-	      React.createElement(
-	        'div',
-	        { className: 'track-pic' },
-	        React.createElement('img', { src: this.props.track.artwork_url, alt: 'Track Picture' })
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'track-content' },
-	        React.createElement(
-	          'div',
-	          { className: 'track-info' },
-	          React.createElement(
-	            'div',
-	            { className: 'track-name' },
-	            React.createElement(
-	              'div',
-	              { className: 'track-title' },
-	              React.createElement(
-	                'a',
-	                { href: this.props.track.permalink_url },
-	                this.props.track.title
-	              )
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'track-plays' },
-	            React.createElement(
-	              'p',
-	              { className: 'track-text' },
-	              'Plays'
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'track-react' },
-	              this.props.track.playback_count
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'track-likes' },
-	            React.createElement(
-	              'p',
-	              { className: 'track-text' },
-	              'Likes'
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'track-react' },
-	              this.props.track.likes_count
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'track-reposts' },
-	            React.createElement('img', { className: 'repost-img', src: './img/reposticon.png' }),
-	            React.createElement(
-	              'div',
-	              { className: 'track-react' },
-	              this.props.track.reposts_count
-	            )
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'track-wav' },
-	          React.createElement('img', { className: 'waveform', src: this.props.track.waveform_url })
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	// this.props.track.##
-	module.exports = Track;
-
-/***/ },
-/* 251 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    ClientAction = __webpack_require__(237),
-	    Track = __webpack_require__(250),
-	    SessionStore = __webpack_require__(245),
-	    Follower = __webpack_require__(252);
-	
-	var AllFollowers = React.createClass({
-	  displayName: 'AllFollowers',
-	
-	  getInitialState: function () {
-	    return { followers: SessionStore.followers(),
-	      user: SessionStore.user(),
-	      username: SessionStore.getUsername() };
-	  },
-	  componentDidMount: function () {
-	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
-	  },
-	  componentWillUnmount: function () {
-	    this.sessionStoreListener.remove();
-	  },
-	  onSessionChange: function () {
-	    this.setState({ followers: SessionStore.followers(),
-	      user: SessionStore.user(),
-	      username: SessionStore.getUsername() });
-	  },
-	  render: function () {
-	    var renderFollowers = [];
-	    var that = this;
-	    this.state.followers.forEach(function (follower) {
-	      renderFollowers.push(React.createElement(Follower, { className: 'main-follower', follower: follower, key: follower.id }));
-	    });
-	    return React.createElement(
-	      'div',
-	      { className: 'all-followers' },
-	      renderFollowers
-	    );
-	  }
-	});
-	
-	module.exports = AllFollowers;
-
-/***/ },
-/* 252 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    ClientAction = __webpack_require__(237),
-	    Track = __webpack_require__(250),
-	    SessionStore = __webpack_require__(245);
-	
-	var Follower = React.createClass({
-	  displayName: 'Follower',
-	
-	  getInitialState: function () {
-	    return { followers: SessionStore.followers() };
-	  },
-	  componentDidMount: function () {},
-	  // componentWillUnmount: function() {
-	  //   this.sessionStoreListener.remove();
-	  // },
-	  onSessionChange: function () {
-	    this.setState({ followers: SessionStore.followers() });
-	  },
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'main-follower' },
-	      React.createElement(
-	        'div',
-	        { className: 'follower-pic-div' },
-	        React.createElement('img', { className: 'followerPic', src: this.props.follower.avatar_url, alt: 'Profile Picture' })
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'follower-info' },
-	        React.createElement(
-	          'div',
-	          { className: 'follower-name' },
-	          React.createElement(
-	            'a',
-	            { href: this.props.follower.permalink_url },
-	            this.props.follower.username
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'follower-city' },
-	          this.props.follower.city
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = Follower;
-
-/***/ },
-/* 253 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    ClientAction = __webpack_require__(237),
-	    SessionStore = __webpack_require__(245);
-	
-	var UserPanel = React.createClass({
-	  displayName: 'UserPanel',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'p-f-f' },
-	      React.createElement(
-	        'div',
-	        { className: 'follower-followers' },
-	        React.createElement(
-	          'p',
-	          { className: 'follower-p' },
-	          'Followers'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'pff-text' },
-	          this.props.user.followers_count
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'follower-following' },
-	        React.createElement(
-	          'p',
-	          { className: 'follower-p' },
-	          'Following'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'pff-text' },
-	          this.props.user.followings_count
-	        )
-	      ),
-	      React.createElement(
-	        'div',
-	        { className: 'follower-plays' },
-	        React.createElement(
-	          'p',
-	          { className: 'follower-p' },
-	          'Tracks'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'pff-text' },
-	          this.props.user.track_count
-	        )
-	      )
-	    );
-	  }
-	});
-	
-	module.exports = UserPanel;
-
-/***/ },
-/* 254 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ScDash = __webpack_require__(247),
-	    ReactDOM = __webpack_require__(34);
-	
-	var GeoMap = React.createClass({
-	  displayName: 'GeoMap',
-	
-	  componentDidMount: function () {
-	    $('#map').vectorMap({ map: 'us_aea' });
-	  },
-	  getInitialState: function () {
-	    return { user: SessionStore.user(),
-	      username: SessionStore.getUsername() };
-	  },
-	  onSessionChange: function () {},
-	  render: function () {
-	    return React.createElement('div', { className: 'map' });
-	  }
-	});
-	
-	module.exports = GeoMap;
-
-/***/ },
-/* 255 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    Navbar = __webpack_require__(248),
-	    SessionStore = __webpack_require__(245),
-	    Footer = __webpack_require__(244),
-	    ClientAction = __webpack_require__(237);
-	
-	var Login = React.createClass({
-	  displayName: 'Login',
-	
-	  signUpClick() {
-	    hashHistory.push('/signup');
-	  },
-	  loginClick() {
-	    // var data = {"username": this.state.username, "password": this.state.password};
-	    // clienAction.userLogin(data);
-	  },
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'main-login' },
-	      React.createElement(Navbar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'login-body' },
-	        React.createElement(
-	          'form',
-	          { className: 'name-form' },
-	          React.createElement(
-	            'div',
-	            { className: 'login-h3' },
-	            React.createElement(
-	              'p',
-	              { className: 'login-header' },
-	              'Log In'
-	            ),
-	            React.createElement(
-	              'a',
-	              { className: 'or-sign-up', onClick: this.signUpClick },
-	              'Or, Sign Up'
-	            )
-	          ),
-	          React.createElement('br', null),
-	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-un-Input',
-	
-	            placeholder: 'Email',
-	            id: 'email' }),
-	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-pw-Input',
-	
-	            placeholder: 'Password',
-	            id: 'password' }),
-	          React.createElement('br', null),
-	          React.createElement(
-	            'div',
-	            { className: 'w-login-button' },
-	            React.createElement(
-	              'button',
-	              { onClick: this.loginClick, className: 'btn w-l-button btn-info' },
-	              'LOG IN'
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'checkbox' },
-	            React.createElement(
-	              'label',
-	              { className: 'remember-user' },
-	              React.createElement('input', { type: 'checkbox', value: '' }),
-	              'Remember Me'
-	            ),
-	            React.createElement(
-	              'a',
-	              { className: 'forgot', href: '' },
-	              'Forgot password?'
-	            )
-	          )
-	        )
-	      ),
-	      React.createElement(Footer, null)
-	    );
-	  }
-	});
-	
-	module.exports = Login;
-
-/***/ },
-/* 256 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    Navbar = __webpack_require__(248),
-	    SessionStore = __webpack_require__(245),
-	    Footer = __webpack_require__(244),
-	    ClientAction = __webpack_require__(237);
-	
-	var SignUpPage = React.createClass({
-	  displayName: 'SignUpPage',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'main-signup' },
-	      React.createElement(Navbar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'signup-body' },
-	        React.createElement(
-	          'form',
-	          { className: 'signup-form' },
-	          React.createElement(
-	            'div',
-	            { className: 'login-h3' },
-	            React.createElement(
-	              'p',
-	              { className: 'sign-up-header' },
-	              'Sign Up'
-	            )
-	          ),
-	          React.createElement('br', null),
-	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-un-Input'
-	            // value={this.state.username}
-	            // onChange={this.onChange}
-	            , placeholder: 'Username',
-	            id: 'email' }),
-	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-pw-Input'
-	            // value={this.state.password}
-	            // onChange={this.onChange}
-	            , placeholder: 'Password',
-	            id: 'password' }),
-	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-pw-Input'
-	            // value={this.state.password}
-	            // onChange={this.onChange}
-	            , placeholder: 'Retype Password',
-	            id: 'password' }),
-	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-pw-Input'
-	            // value={this.state.password}
-	            // onChange={this.onChange}
-	            , placeholder: 'Email',
-	            id: 'password' }),
-	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-pw-Input'
-	            // value={this.state.password}
-	            // onChange={this.onChange}
-	            , placeholder: 'Artist Name',
-	            id: 'password' }),
-	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-pw-Input'
-	            // value={this.state.password}
-	            // onChange={this.onChange}
-	            , placeholder: 'First name',
-	            id: 'password' }),
-	          React.createElement('input', { type: 'text',
-	            className: 'w-form-textbox w-pw-Input'
-	            // value={this.state.password}
-	            // onChange={this.onChange}
-	            , placeholder: 'Last name',
-	            id: 'password' }),
-	          React.createElement('br', null),
-	          React.createElement(
-	            'div',
-	            { className: 'w-login-button' },
-	            React.createElement(
-	              'button',
-	              { className: 'btn btn-info w-l-button' },
-	              'SIGN UP'
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'checkbox' },
-	            React.createElement(
-	              'label',
-	              { className: 'remember-user' },
-	              React.createElement('input', { type: 'checkbox', value: '' }),
-	              'Remember Me'
-	            ),
-	            React.createElement(
-	              'a',
-	              { className: 'forgot', href: '' },
-	              'Forgot password?'
-	            )
-	          )
-	        )
-	      ),
-	      React.createElement(Footer, null)
-	    );
-	  }
-	});
-	
-	module.exports = SignUpPage;
-
-/***/ },
-/* 257 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    Navbar = __webpack_require__(248),
-	    SessionStore = __webpack_require__(245),
-	    Footer = __webpack_require__(244),
-	    ClientAction = __webpack_require__(237);
-	
-	var Services = React.createClass({
-	  displayName: 'Services',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'main-services' },
-	      React.createElement(Navbar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'services-body' },
-	        React.createElement(
-	          'div',
-	          { className: 'services-h-pic' },
-	          React.createElement('img', { className: 'header-pic', src: './img/musicstudio.jpeg' })
-	        ),
-	        React.createElement(
-	          'h1',
-	          { className: 'services-header' },
-	          'Artist Services'
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'artist-services-div' },
-	          React.createElement(
-	            'div',
-	            { className: 'artist-service' },
-	            React.createElement(
-	              'h5',
-	              null,
-	              'Fan Retention'
-	            ),
-	            React.createElement(
-	              'p',
-	              { className: 'service-text' },
-	              'It can be hard to manage retaining and engaging your current fans while also expanding your growing fanbase. We can help you utilize data to create a clear path to growth.'
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'artist-service' },
-	            React.createElement(
-	              'h5',
-	              null,
-	              'Awareness'
-	            ),
-	            React.createElement(
-	              'p',
-	              { className: 'service-text' },
-	              '"Build and they will come" does not work always in this current oversaturated market. Focus on your creating quality music and let us handle getting it into the right ears.'
-	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'artist-service' },
-	            React.createElement(
-	              'h5',
-	              null,
-	              'Revenue'
-	            ),
-	            React.createElement(
-	              'p',
-	              { className: 'service-text' },
-	              'Are you still working a job that is getting in the way of you creating and performing? \u201CStarving artist\u201D is a phase, not a lifestyle. Let\u2019s create a plan on how we can make performing and creating your 9 to 5.'
-	            )
-	          )
-	        )
-	      ),
-	      React.createElement(Footer, null)
-	    );
-	  }
-	});
-	
-	module.exports = Services;
-
-/***/ },
-/* 258 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    Navbar = __webpack_require__(248),
-	    SessionStore = __webpack_require__(245),
-	    Footer = __webpack_require__(244),
-	    ClientAction = __webpack_require__(237);
-	
-	var About = React.createClass({
-	  displayName: 'About',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'main-about' },
-	      React.createElement(Navbar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'about-body' },
-	        React.createElement(
-	          'p',
-	          null,
-	          'About Page'
-	        ),
-	        React.createElement('div', { className: 'about-pic' }),
-	        React.createElement(
-	          'div',
-	          { className: 'about-text' },
-	          React.createElement(
-	            'p',
-	            null,
-	            ' Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text.'
-	          )
-	        )
-	      ),
-	      React.createElement(Footer, null)
-	    );
-	  }
-	});
-	
-	module.exports = About;
-
-/***/ },
-/* 259 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(1),
-	    ReactDOM = __webpack_require__(34),
-	    hashHistory = __webpack_require__(173).hashHistory,
-	    Navbar = __webpack_require__(248),
-	    SessionStore = __webpack_require__(245),
-	    Footer = __webpack_require__(244),
-	    ClientAction = __webpack_require__(237);
-	
-	var Team = React.createClass({
-	  displayName: 'Team',
-	
-	  render: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'main-about' },
-	      React.createElement(Navbar, null),
-	      React.createElement(
-	        'div',
-	        { className: 'about-body' },
-	        React.createElement(
-	          'p',
-	          null,
-	          'Team Page'
-	        ),
-	        React.createElement('div', { className: 'about-pic' }),
-	        React.createElement(
-	          'div',
-	          { className: 'about-text' },
-	          React.createElement(
-	            'p',
-	            null,
-	            ' Filler Text.'
-	          )
-	        )
-	      ),
-	      React.createElement(Footer, null)
-	    );
-	  }
-	});
-	
-	module.exports = Team;
-
-/***/ },
-/* 260 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/**
 	 * Copyright (c) 2014-2015, Facebook, Inc.
 	 * All rights reserved.
@@ -28856,14 +27858,14 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Container = __webpack_require__(261);
-	module.exports.Mixin = __webpack_require__(265);
-	module.exports.ReduceStore = __webpack_require__(266);
-	module.exports.Store = __webpack_require__(267);
+	module.exports.Container = __webpack_require__(247);
+	module.exports.Mixin = __webpack_require__(251);
+	module.exports.ReduceStore = __webpack_require__(252);
+	module.exports.Store = __webpack_require__(253);
 
 
 /***/ },
-/* 261 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -28886,11 +27888,11 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxContainerSubscriptions = __webpack_require__(262);
+	var FluxContainerSubscriptions = __webpack_require__(248);
 	var React = __webpack_require__(1);
 	
 	var invariant = __webpack_require__(241);
-	var shallowEqual = __webpack_require__(264);
+	var shallowEqual = __webpack_require__(250);
 	
 	var Component = React.Component;
 	
@@ -29136,7 +28138,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 262 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29154,7 +28156,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var FluxStoreGroup = __webpack_require__(263);
+	var FluxStoreGroup = __webpack_require__(249);
 	
 	var FluxContainerSubscriptions = (function () {
 	  function FluxContainerSubscriptions() {
@@ -29244,7 +28246,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 263 */
+/* 249 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29325,7 +28327,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 264 */
+/* 250 */
 /***/ function(module, exports) {
 
 	/**
@@ -29397,7 +28399,7 @@
 	module.exports = shallowEqual;
 
 /***/ },
-/* 265 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29413,7 +28415,7 @@
 	
 	'use strict';
 	
-	var FluxStoreGroup = __webpack_require__(263);
+	var FluxStoreGroup = __webpack_require__(249);
 	
 	var invariant = __webpack_require__(241);
 	
@@ -29525,7 +28527,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 266 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29545,9 +28547,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var FluxStore = __webpack_require__(267);
+	var FluxStore = __webpack_require__(253);
 	
-	var abstractMethod = __webpack_require__(274);
+	var abstractMethod = __webpack_require__(260);
 	var invariant = __webpack_require__(241);
 	
 	/**
@@ -29649,7 +28651,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 267 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29667,7 +28669,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var _require = __webpack_require__(268);
+	var _require = __webpack_require__(254);
 	
 	var EventEmitter = _require.EventEmitter;
 	
@@ -29763,7 +28765,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 268 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -29776,15 +28778,15 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(269),
-	  EmitterSubscription : __webpack_require__(270)
+	  EventEmitter: __webpack_require__(255),
+	  EmitterSubscription : __webpack_require__(256)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 269 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -29803,10 +28805,10 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(270);
-	var EventSubscriptionVendor = __webpack_require__(272);
+	var EmitterSubscription = __webpack_require__(256);
+	var EventSubscriptionVendor = __webpack_require__(258);
 	
-	var emptyFunction = __webpack_require__(273);
+	var emptyFunction = __webpack_require__(259);
 	var invariant = __webpack_require__(241);
 	
 	/**
@@ -29981,7 +28983,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 270 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -30002,7 +29004,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(271);
+	var EventSubscription = __webpack_require__(257);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -30034,7 +29036,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 271 */
+/* 257 */
 /***/ function(module, exports) {
 
 	/**
@@ -30088,7 +29090,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 272 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -30197,7 +29199,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 273 */
+/* 259 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -30240,7 +29242,7 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 274 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -30267,12 +29269,1007 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 275 */
+/* 261 */
 /***/ function(module, exports) {
 
 	module.exports = {
 	  RECEIVE_TRACKS: "RECEIVE_TRACKS"
 	};
+
+/***/ },
+/* 262 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ScDash = __webpack_require__(263),
+	    LandingPage = __webpack_require__(236),
+	    Insights = __webpack_require__(172),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    ReactDOM = __webpack_require__(34),
+	    NavBar = __webpack_require__(264),
+	    Footer = __webpack_require__(244),
+	    AllTracks = __webpack_require__(265),
+	    AllFollowers = __webpack_require__(267),
+	    UserPanel = __webpack_require__(269),
+	    GeoMap = __webpack_require__(270),
+	    Login = __webpack_require__(271),
+	    SignUpPage = __webpack_require__(272),
+	    Services = __webpack_require__(273),
+	    About = __webpack_require__(274),
+	    Team = __webpack_require__(275),
+	    Follower = __webpack_require__(268);
+	
+	var App = React.createClass({
+	  displayName: 'App',
+	
+	  getInitialState: function () {
+	    return { loggedIn: false };
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'mainDiv' },
+	      this.props.children
+	    );
+	  }
+	});
+	
+	module.exports = App;
+
+/***/ },
+/* 263 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    Navbar = __webpack_require__(264),
+	    SessionStore = __webpack_require__(245),
+	    Footer = __webpack_require__(244),
+	    AllTracks = __webpack_require__(265),
+	    Track = __webpack_require__(266),
+	    AllFollowers = __webpack_require__(267),
+	    Follower = __webpack_require__(268),
+	    UserPanel = __webpack_require__(269),
+	    ClientAction = __webpack_require__(237),
+	    GeoMap = __webpack_require__(270),
+	    LandingPage = __webpack_require__(236);
+	
+	var ScDash = React.createClass({
+	  displayName: 'ScDash',
+	
+	  getInitialState: function () {
+	    return { user: SessionStore.user(),
+	      username: SessionStore.getUsername() };
+	  },
+	  componentDidMount: function () {
+	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
+	    ClientAction.getUserInfo(this.state.username);
+	    ClientAction.getFollowers(this.state.username);
+	    $(function () {
+	      $('.map').vectorMap({ map: 'us_aea' });
+	    });
+	  },
+	  componentWillUnmount: function () {
+	    this.sessionStoreListener.remove();
+	  },
+	  onSessionChange: function () {
+	    this.setState({ user: SessionStore.user() });
+	  },
+	  render: function () {
+	    var renderFollowers = [];
+	    var that = this;
+	    return React.createElement(
+	      'div',
+	      { className: 'main-Sc-Div' },
+	      React.createElement(Navbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'dashHeader' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Your Dashboard'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'follower-content' },
+	        React.createElement(
+	          'div',
+	          { className: 'account-data' },
+	          React.createElement(UserPanel, { user: this.state.user }),
+	          React.createElement(
+	            'div',
+	            { className: 'followers-title' },
+	            React.createElement(
+	              'h3',
+	              null,
+	              'Your Followers'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'followers' },
+	            React.createElement(AllFollowers, null)
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'the-map' },
+	          React.createElement(GeoMap, null)
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'track-content-header' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Track Activity'
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'main-track-content' },
+	        React.createElement(AllTracks, null)
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = ScDash;
+
+/***/ },
+/* 264 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    LandingPage = __webpack_require__(236);
+	
+	var NavBar = React.createClass({
+	  displayName: 'NavBar',
+	
+	  loginClick() {
+	    hashHistory.push('/login');
+	  },
+	  logoClick() {
+	    hashHistory.push('/dashboard');
+	  },
+	  signUpClick() {
+	    hashHistory.push('/signup');
+	  },
+	  servicesClick() {
+	    hashHistory.push('/services');
+	  },
+	  aboutClick() {
+	    hashHistory.push('/about');
+	  },
+	  teamClick() {
+	    hashHistory.push('/team');
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'mainNav' },
+	      React.createElement(
+	        'nav',
+	        { className: 'navbar navbar-default topNav' },
+	        React.createElement(
+	          'div',
+	          { className: 'navbar-header topNavLeft' },
+	          React.createElement(
+	            'button',
+	            { type: 'button', className: 'navbar-toggle collapsed', 'data-toggle': 'collapse', 'data-target': '#bs-example-navbar-collapse-1', 'aria-expanded': 'false' },
+	            React.createElement(
+	              'span',
+	              { className: 'sr-only' },
+	              'Toggle navigation'
+	            ),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' }),
+	            React.createElement('span', { className: 'icon-bar' })
+	          ),
+	          React.createElement(
+	            'a',
+	            { onClick: this.logoClick, className: 'logo' },
+	            React.createElement('img', { className: 'logo', src: './img/wysidio.jpg' })
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'topNavRight' },
+	          React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	              'a',
+	              { className: 'loginLink navbar-brand', onClick: this.loginClick },
+	              'LOGIN'
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'loginLink navbar-brand', onClick: this.signUpClick },
+	              'SIGN UP'
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'loginLink navbar-brand', onClick: this.servicesClick },
+	              'SERVICES'
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'loginLink navbar-brand', onClick: this.aboutClick },
+	              'ABOUT'
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'loginLink navbar-brand', onClick: this.teamClick },
+	              'TEAM'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'btn-group navButton' },
+	            React.createElement(
+	              'button',
+	              { type: 'button', className: 'navButton btn btn-default dropdown-toggle', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
+	              React.createElement('img', { className: 'userPro navButton', src: './img/userprofilepic.jpg' }),
+	              React.createElement('span', { className: 'caret' })
+	            ),
+	            React.createElement(
+	              'ul',
+	              { className: 'dropdown-menu' },
+	              React.createElement(
+	                'li',
+	                null,
+	                React.createElement(
+	                  'a',
+	                  { href: '#' },
+	                  'Login'
+	                )
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                React.createElement(
+	                  'a',
+	                  { href: '#' },
+	                  'Sign Up'
+	                )
+	              ),
+	              React.createElement(
+	                'li',
+	                null,
+	                React.createElement(
+	                  'a',
+	                  { href: '#' },
+	                  'Profile'
+	                )
+	              )
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = NavBar;
+
+/***/ },
+/* 265 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    ClientAction = __webpack_require__(237),
+	    Track = __webpack_require__(266),
+	    SessionStore = __webpack_require__(245);
+	
+	var AllTracks = React.createClass({
+	  displayName: 'AllTracks',
+	
+	  getInitialState: function () {
+	    return { tracks: SessionStore.tracks(),
+	      user: SessionStore.user(),
+	      username: SessionStore.getUsername() };
+	  },
+	  componentDidMount: function () {
+	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
+	    ClientAction.getTracks(this.state.username);
+	  },
+	  componentWillUnmount: function () {
+	    this.sessionStoreListener.remove();
+	  },
+	  onSessionChange: function () {
+	    this.setState({ tracks: SessionStore.tracks() });
+	  },
+	  convertWaveForm(old_waveform) {
+	    return old_waveform.replace(/(wis)/i, 'w1').replace(/(json)/i, 'png');
+	  },
+	  render: function () {
+	    var renderTracks = [];
+	    var that = this;
+	    this.state.tracks.forEach(function (track) {
+	      renderTracks.push(React.createElement(Track, { className: 'main-track', track: track, key: track.id }));
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'all-tracks' },
+	      renderTracks
+	    );
+	  }
+	});
+	
+	module.exports = AllTracks;
+
+/***/ },
+/* 266 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    ClientAction = __webpack_require__(237),
+	    SessionStore = __webpack_require__(245);
+	
+	var Track = React.createClass({
+	  displayName: 'Track',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-track' },
+	      React.createElement(
+	        'div',
+	        { className: 'track-pic' },
+	        React.createElement('img', { src: this.props.track.artwork_url, alt: 'Track Picture' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'track-content' },
+	        React.createElement(
+	          'div',
+	          { className: 'track-info' },
+	          React.createElement(
+	            'div',
+	            { className: 'track-name' },
+	            React.createElement(
+	              'div',
+	              { className: 'track-title' },
+	              React.createElement(
+	                'a',
+	                { href: this.props.track.permalink_url },
+	                this.props.track.title
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'track-plays' },
+	            React.createElement(
+	              'p',
+	              { className: 'track-text' },
+	              'Plays'
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'track-react' },
+	              this.props.track.playback_count
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'track-likes' },
+	            React.createElement(
+	              'p',
+	              { className: 'track-text' },
+	              'Likes'
+	            ),
+	            React.createElement(
+	              'div',
+	              { className: 'track-react' },
+	              this.props.track.likes_count
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'track-reposts' },
+	            React.createElement('img', { className: 'repost-img', src: './img/reposticon.png' }),
+	            React.createElement(
+	              'div',
+	              { className: 'track-react' },
+	              this.props.track.reposts_count
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'track-wav' },
+	          React.createElement('img', { className: 'waveform', src: this.props.track.waveform_url })
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	// this.props.track.##
+	module.exports = Track;
+
+/***/ },
+/* 267 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    ClientAction = __webpack_require__(237),
+	    Track = __webpack_require__(266),
+	    SessionStore = __webpack_require__(245),
+	    Follower = __webpack_require__(268);
+	
+	var AllFollowers = React.createClass({
+	  displayName: 'AllFollowers',
+	
+	  getInitialState: function () {
+	    return { followers: SessionStore.followers(),
+	      user: SessionStore.user(),
+	      username: SessionStore.getUsername() };
+	  },
+	  componentDidMount: function () {
+	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
+	  },
+	  componentWillUnmount: function () {
+	    this.sessionStoreListener.remove();
+	  },
+	  onSessionChange: function () {
+	    this.setState({ followers: SessionStore.followers(),
+	      user: SessionStore.user(),
+	      username: SessionStore.getUsername() });
+	  },
+	  render: function () {
+	    var renderFollowers = [];
+	    var that = this;
+	    this.state.followers.forEach(function (follower) {
+	      renderFollowers.push(React.createElement(Follower, { className: 'main-follower', follower: follower, key: follower.id }));
+	    });
+	    return React.createElement(
+	      'div',
+	      { className: 'all-followers' },
+	      renderFollowers
+	    );
+	  }
+	});
+	
+	module.exports = AllFollowers;
+
+/***/ },
+/* 268 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    ClientAction = __webpack_require__(237),
+	    Track = __webpack_require__(266),
+	    SessionStore = __webpack_require__(245);
+	
+	var Follower = React.createClass({
+	  displayName: 'Follower',
+	
+	  getInitialState: function () {
+	    return { followers: SessionStore.followers() };
+	  },
+	  componentDidMount: function () {},
+	  // componentWillUnmount: function() {
+	  //   this.sessionStoreListener.remove();
+	  // },
+	  onSessionChange: function () {
+	    this.setState({ followers: SessionStore.followers() });
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-follower' },
+	      React.createElement(
+	        'div',
+	        { className: 'follower-pic-div' },
+	        React.createElement('img', { className: 'followerPic', src: this.props.follower.avatar_url, alt: 'Profile Picture' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'follower-info' },
+	        React.createElement(
+	          'div',
+	          { className: 'follower-name' },
+	          React.createElement(
+	            'a',
+	            { href: this.props.follower.permalink_url },
+	            this.props.follower.username
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'follower-city' },
+	          this.props.follower.city
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Follower;
+
+/***/ },
+/* 269 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    ClientAction = __webpack_require__(237),
+	    SessionStore = __webpack_require__(245);
+	
+	var UserPanel = React.createClass({
+	  displayName: 'UserPanel',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'p-f-f' },
+	      React.createElement(
+	        'div',
+	        { className: 'follower-followers' },
+	        React.createElement(
+	          'p',
+	          { className: 'follower-p' },
+	          'Followers'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'pff-text' },
+	          this.props.user.followers_count
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'follower-following' },
+	        React.createElement(
+	          'p',
+	          { className: 'follower-p' },
+	          'Following'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'pff-text' },
+	          this.props.user.followings_count
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'follower-plays' },
+	        React.createElement(
+	          'p',
+	          { className: 'follower-p' },
+	          'Tracks'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'pff-text' },
+	          this.props.user.track_count
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = UserPanel;
+
+/***/ },
+/* 270 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ScDash = __webpack_require__(263),
+	    ReactDOM = __webpack_require__(34);
+	
+	var GeoMap = React.createClass({
+	  displayName: 'GeoMap',
+	
+	  componentDidMount: function () {
+	    $('#map').vectorMap({ map: 'us_aea' });
+	  },
+	
+	  onSessionChange: function () {},
+	  render: function () {
+	    return React.createElement('div', { className: 'map' });
+	  }
+	});
+	
+	module.exports = GeoMap;
+
+/***/ },
+/* 271 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    Navbar = __webpack_require__(264),
+	    SessionStore = __webpack_require__(245),
+	    Footer = __webpack_require__(244),
+	    ClientAction = __webpack_require__(237);
+	
+	var Login = React.createClass({
+	  displayName: 'Login',
+	
+	  signUpClick() {
+	    hashHistory.push('/signup');
+	  },
+	  loginClick() {
+	    // var data = {"username": this.state.username, "password": this.state.password};
+	    // clienAction.userLogin(data);
+	  },
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-login' },
+	      React.createElement(Navbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'login-body' },
+	        React.createElement(
+	          'form',
+	          { className: 'name-form' },
+	          React.createElement(
+	            'div',
+	            { className: 'login-h3' },
+	            React.createElement(
+	              'p',
+	              { className: 'login-header' },
+	              'Log In'
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'or-sign-up', onClick: this.signUpClick },
+	              'Or, Sign Up'
+	            )
+	          ),
+	          React.createElement('br', null),
+	          React.createElement('input', { type: 'text',
+	            className: 'w-form-textbox w-un-Input',
+	
+	            placeholder: 'Email',
+	            id: 'email' }),
+	          React.createElement('input', { type: 'text',
+	            className: 'w-form-textbox w-pw-Input',
+	
+	            placeholder: 'Password',
+	            id: 'password' }),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'div',
+	            { className: 'w-login-button' },
+	            React.createElement(
+	              'button',
+	              { onClick: this.loginClick, className: 'btn w-l-button btn-info' },
+	              'LOG IN'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'checkbox' },
+	            React.createElement(
+	              'label',
+	              { className: 'remember-user' },
+	              React.createElement('input', { type: 'checkbox', value: '' }),
+	              'Remember Me'
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'forgot', href: '' },
+	              'Forgot password?'
+	            )
+	          )
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = Login;
+
+/***/ },
+/* 272 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    Navbar = __webpack_require__(264),
+	    SessionStore = __webpack_require__(245),
+	    Footer = __webpack_require__(244),
+	    ClientAction = __webpack_require__(237);
+	
+	var SignUpPage = React.createClass({
+	  displayName: 'SignUpPage',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-signup' },
+	      React.createElement(Navbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'signup-body' },
+	        React.createElement(
+	          'form',
+	          { className: 'signup-form' },
+	          React.createElement(
+	            'div',
+	            { className: 'login-h3' },
+	            React.createElement(
+	              'p',
+	              { className: 'sign-up-header' },
+	              'Sign Up'
+	            )
+	          ),
+	          React.createElement('br', null),
+	          React.createElement('input', { type: 'text',
+	            className: 'w-form-textbox w-un-Input'
+	            // value={this.state.username}
+	            // onChange={this.onChange}
+	            , placeholder: 'Username',
+	            id: 'email' }),
+	          React.createElement('input', { type: 'text',
+	            className: 'w-form-textbox w-pw-Input'
+	            // value={this.state.password}
+	            // onChange={this.onChange}
+	            , placeholder: 'Password',
+	            id: 'password' }),
+	          React.createElement('input', { type: 'text',
+	            className: 'w-form-textbox w-pw-Input'
+	            // value={this.state.password}
+	            // onChange={this.onChange}
+	            , placeholder: 'Retype Password',
+	            id: 'password' }),
+	          React.createElement('input', { type: 'text',
+	            className: 'w-form-textbox w-pw-Input'
+	            // value={this.state.password}
+	            // onChange={this.onChange}
+	            , placeholder: 'Email',
+	            id: 'password' }),
+	          React.createElement('input', { type: 'text',
+	            className: 'w-form-textbox w-pw-Input'
+	            // value={this.state.password}
+	            // onChange={this.onChange}
+	            , placeholder: 'Artist Name',
+	            id: 'password' }),
+	          React.createElement('input', { type: 'text',
+	            className: 'w-form-textbox w-pw-Input'
+	            // value={this.state.password}
+	            // onChange={this.onChange}
+	            , placeholder: 'First name',
+	            id: 'password' }),
+	          React.createElement('input', { type: 'text',
+	            className: 'w-form-textbox w-pw-Input'
+	            // value={this.state.password}
+	            // onChange={this.onChange}
+	            , placeholder: 'Last name',
+	            id: 'password' }),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'div',
+	            { className: 'w-login-button' },
+	            React.createElement(
+	              'button',
+	              { className: 'btn btn-info w-l-button' },
+	              'SIGN UP'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'checkbox' },
+	            React.createElement(
+	              'label',
+	              { className: 'remember-user' },
+	              React.createElement('input', { type: 'checkbox', value: '' }),
+	              'Remember Me'
+	            ),
+	            React.createElement(
+	              'a',
+	              { className: 'forgot', href: '' },
+	              'Forgot password?'
+	            )
+	          )
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = SignUpPage;
+
+/***/ },
+/* 273 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    Navbar = __webpack_require__(264),
+	    SessionStore = __webpack_require__(245),
+	    Footer = __webpack_require__(244),
+	    ClientAction = __webpack_require__(237);
+	
+	var Services = React.createClass({
+	  displayName: 'Services',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-services' },
+	      React.createElement(Navbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'services-body' },
+	        React.createElement(
+	          'div',
+	          { className: 'services-h-pic' },
+	          React.createElement('img', { className: 'header-pic', src: './img/musicstudio.jpeg' })
+	        ),
+	        React.createElement(
+	          'h1',
+	          { className: 'services-header' },
+	          'Artist Services'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'artist-services-div' },
+	          React.createElement(
+	            'div',
+	            { className: 'artist-service' },
+	            React.createElement(
+	              'h5',
+	              null,
+	              'Fan Retention'
+	            ),
+	            React.createElement(
+	              'p',
+	              { className: 'service-text' },
+	              'It can be hard to manage retaining and engaging your current fans while also expanding your growing fanbase. We can help you utilize data to create a clear path to growth.'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'artist-service' },
+	            React.createElement(
+	              'h5',
+	              null,
+	              'Awareness'
+	            ),
+	            React.createElement(
+	              'p',
+	              { className: 'service-text' },
+	              '"Build and they will come" does not work always in this current oversaturated market. Focus on your creating quality music and let us handle getting it into the right ears.'
+	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'artist-service' },
+	            React.createElement(
+	              'h5',
+	              null,
+	              'Revenue'
+	            ),
+	            React.createElement(
+	              'p',
+	              { className: 'service-text' },
+	              'Are you still working a job that is getting in the way of you creating and performing? \u201CStarving artist\u201D is a phase, not a lifestyle. Let\u2019s create a plan on how we can make performing and creating your 9 to 5.'
+	            )
+	          )
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = Services;
+
+/***/ },
+/* 274 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    Navbar = __webpack_require__(264),
+	    SessionStore = __webpack_require__(245),
+	    Footer = __webpack_require__(244),
+	    ClientAction = __webpack_require__(237);
+	
+	var About = React.createClass({
+	  displayName: 'About',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-about' },
+	      React.createElement(Navbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'about-body' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'About Page'
+	        ),
+	        React.createElement('div', { className: 'about-pic' }),
+	        React.createElement(
+	          'div',
+	          { className: 'about-text' },
+	          React.createElement(
+	            'p',
+	            null,
+	            ' Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text. Filler Text.'
+	          )
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = About;
+
+/***/ },
+/* 275 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1),
+	    ReactDOM = __webpack_require__(34),
+	    hashHistory = __webpack_require__(173).hashHistory,
+	    Navbar = __webpack_require__(264),
+	    SessionStore = __webpack_require__(245),
+	    Footer = __webpack_require__(244),
+	    ClientAction = __webpack_require__(237);
+	
+	var Team = React.createClass({
+	  displayName: 'Team',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'main-about' },
+	      React.createElement(Navbar, null),
+	      React.createElement(
+	        'div',
+	        { className: 'about-body' },
+	        React.createElement(
+	          'p',
+	          null,
+	          'Team Page'
+	        ),
+	        React.createElement('div', { className: 'about-pic' }),
+	        React.createElement(
+	          'div',
+	          { className: 'about-text' },
+	          React.createElement(
+	            'p',
+	            null,
+	            ' Filler Text.'
+	          )
+	        )
+	      ),
+	      React.createElement(Footer, null)
+	    );
+	  }
+	});
+	
+	module.exports = Team;
 
 /***/ }
 /******/ ]);
