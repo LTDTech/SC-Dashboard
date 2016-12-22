@@ -38,4 +38,10 @@ module.exports = {
       user: user
     });
   },
+  getCoordinates: function(receivedFollowers) {
+    Dispatcher.dispatch({
+      actionType: "getCoordinates",
+      data: receivedFollowers
+    })
+  },
 };

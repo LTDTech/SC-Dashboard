@@ -27594,6 +27594,7 @@
 	      method: 'GET',
 	      success: function (receivedFollowers) {
 	        ServerAction.receivedFollowers(receivedFollowers);
+	        ServerAction.getCoordinates(receivedFollowers);
 	      },
 	      error: function (error) {
 	        console.log(error.statusCode());
@@ -27670,6 +27671,12 @@
 	    Dispatcher.dispatch({
 	      actionType: "userLogin",
 	      user: user
+	    });
+	  },
+	  getCoordinates: function (receivedFollowers) {
+	    Dispatcher.dispatch({
+	      actionType: "getCoordinates",
+	      data: receivedFollowers
 	    });
 	  }
 	};
@@ -27757,7 +27764,8 @@
 	    return _username;
 	  }
 	};
-	SessionStore.releaseFollowers = function () {
+	
+	SessionStore.getCoordinates = function () {
 	  return _coordinates;
 	};
 	
@@ -27766,13 +27774,15 @@
 	};
 	
 	var getCoordinates = function (followers) {
-	  followers.forEach(function (follower) {
-	    $.ajax({ url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + follower.city + "key=AIzaSyCpZ5r-c6NA8hvSW_w90FPprl48G6O5JdM",
+	  followers.slice(0, 20).forEach(function (follower) {
+	    $.ajax({ url: "https://maps.googleapis.com/maps/api/geocode/json?address=+" + follower.city + "key=AIzaSyCpZ5r-c6NA8hvSW_w90FPprl48G6O5JdM",
 	      success: function (coordinates) {
+	        console.log(coordinates, "here are the coordinates");
 	        _coordinates.push(JSON.parse.coordinates);
 	      },
 	      error: function (uncoordinated) {
-	        SessionStore.unknownFollowers(uncoordinated);
+	        console.log("There was an error getting the coordiantes");
+	        SessionStore.unknownFollowers();
 	      } });
 	  });
 	  SessionStore.__emitChange();
@@ -27823,22 +27833,6 @@
 	    case "receivedUserInfo":
 	      receivedUserInfo(payload.data);
 	      console.log(payload.data);
-	      break;
-	
-	    case UserConstants.RECEIVE_CURRENT_USER:
-	      receiveCurrent(payload.user);
-	      break;
-	    case UserConstants.ERROR_RECEIVED:
-	      recieveError(payload.error);
-	      break;
-	    case "CLEAR_ERROR":
-	      clearErrors();
-	      break;
-	    case ResponseConstants.RECEIVE_SINGLE_RESPONSE:
-	      receiveNewResponse(payload.response);
-	      break;
-	    case AboutConstants.RECEIVE_SINGLE_ABOUT:
-	      updateAbout(payload.about);
 	      break;
 	  }
 	};
@@ -29340,7 +29334,8 @@
 	
 	  getInitialState: function () {
 	    return { user: SessionStore.user(),
-	      username: SessionStore.getUsername() };
+	      username: SessionStore.getUsername(),
+	      followers: SessionStore.getCoordinates() };
 	  },
 	  componentDidMount: function () {
 	    this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
@@ -29350,11 +29345,40 @@
 	      $('.map').vectorMap({ map: 'us_aea' });
 	    });
 	  },
-	  componentWillUnmount: function () {
-	    this.sessionStoreListener.remove();
-	  },
 	  onSessionChange: function () {
-	    this.setState({ user: SessionStore.user() });
+	    this.setState({ user: SessionStore.user(),
+	      followers: SessionStore.getCoordinates(),
+	      username: SessionStore.getUsername() });
+	
+	    // if (this.state.followers !== null) {
+	    //   $('.map').vectorMap({
+	    //     map: 'us_aea_en',
+	    //     markers: data.metro.coords,
+	    //     series: {
+	    //       markers: [{
+	    //         attribute: 'fill',
+	    //         scale: ['#FEE5D9', '#A50F15'],
+	    //         values: data.metro.unemployment[val],
+	    //         min: jvm.min(metroUnemplValues),
+	    //         max: jvm.max(metroUnemplValues)
+	    //       },{
+	    //         attribute: 'r',
+	    //         scale: [5, 20],
+	    //         values: data.metro.population[val],
+	    //         min: jvm.min(metroPopValues),
+	    //         max: jvm.max(metroPopValues)
+	    //       }],
+	    //       regions: [{
+	    //         scale: ['#DEEBF7', '#08519C'],
+	    //         attribute: 'fill',
+	    //         values: data.states[val],
+	    //         min: jvm.min(statesValues),
+	    //         max: jvm.max(statesValues)
+	    //       }]
+	    //     }
+	    //     //...
+	    //   });
+	    // }
 	  },
 	  render: function () {
 	    var renderFollowers = [];
@@ -29510,47 +29534,6 @@
 	              { className: 'loginLink navbar-brand', onClick: this.teamClick },
 	              'TEAM'
 	            )
-	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'btn-group navButton' },
-	            React.createElement(
-	              'button',
-	              { type: 'button', className: 'navButton btn btn-default dropdown-toggle', 'data-toggle': 'dropdown', 'aria-haspopup': 'true', 'aria-expanded': 'false' },
-	              React.createElement('img', { className: 'userPro navButton', src: './img/userprofilepic.jpg' }),
-	              React.createElement('span', { className: 'caret' })
-	            ),
-	            React.createElement(
-	              'ul',
-	              { className: 'dropdown-menu' },
-	              React.createElement(
-	                'li',
-	                null,
-	                React.createElement(
-	                  'a',
-	                  { href: '#' },
-	                  'Login'
-	                )
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                React.createElement(
-	                  'a',
-	                  { href: '#' },
-	                  'Sign Up'
-	                )
-	              ),
-	              React.createElement(
-	                'li',
-	                null,
-	                React.createElement(
-	                  'a',
-	                  { href: '#' },
-	                  'Profile'
-	                )
-	              )
-	            )
 	          )
 	        )
 	      )
@@ -29695,8 +29678,6 @@
 	    );
 	  }
 	});
-	
-	// this.props.track.##
 	module.exports = Track;
 
 /***/ },

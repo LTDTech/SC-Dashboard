@@ -39,7 +39,8 @@ SessionStore.getUsername = function () {
     return _username;
   }
 };
-SessionStore.releaseFollowers = function () {
+
+SessionStore.getCoordinates = function () {
   return _coordinates;
 };
 
@@ -48,13 +49,15 @@ SessionStore.unknownFollowers = function () {
 };
 
 var getCoordinates = function(followers) {
-  followers.forEach(function(follower){
-    $.ajax({url: "https://maps.googleapis.com/maps/api/geocode/json?address=" + follower.city + "key=AIzaSyCpZ5r-c6NA8hvSW_w90FPprl48G6O5JdM",
+  followers.slice(0,20).forEach(function(follower){
+    $.ajax({url: "https://maps.googleapis.com/maps/api/geocode/json?address=+" + follower.city + "key=AIzaSyCpZ5r-c6NA8hvSW_w90FPprl48G6O5JdM",
     success: function(coordinates) {
+      console.log(coordinates, "here are the coordinates");
       _coordinates.push(JSON.parse.coordinates);
     },
     error: function(uncoordinated) {
-      SessionStore.unknownFollowers(uncoordinated);
+      console.log("There was an error getting the coordiantes");
+      SessionStore.unknownFollowers();
     }});
   });
   SessionStore.__emitChange();
@@ -105,22 +108,6 @@ SessionStore.__onDispatch = function (payload) {
     case "receivedUserInfo":
       receivedUserInfo(payload.data);
       console.log(payload.data);
-      break;
-
-    case UserConstants.RECEIVE_CURRENT_USER:
-      receiveCurrent(payload.user);
-      break;
-    case UserConstants.ERROR_RECEIVED:
-      recieveError(payload.error);
-      break;
-    case "CLEAR_ERROR":
-      clearErrors();
-      break;
-    case ResponseConstants.RECEIVE_SINGLE_RESPONSE:
-      receiveNewResponse(payload.response);
-      break;
-    case AboutConstants.RECEIVE_SINGLE_ABOUT:
-      updateAbout(payload.about);
       break;
   }
 

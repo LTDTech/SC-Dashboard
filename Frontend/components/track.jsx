@@ -44,6 +44,4 @@ var React = require('react'),
       );
     }
   });
-
-// this.props.track.##
   module.exports = Track;

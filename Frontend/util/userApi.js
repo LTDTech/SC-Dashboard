@@ -40,6 +40,7 @@ module.exports = {
       method: 'GET',
       success: function(receivedFollowers) {
         ServerAction.receivedFollowers(receivedFollowers);
+        ServerAction.getCoordinates(receivedFollowers);
       },
       error: function(error) {
         console.log(error.statusCode());

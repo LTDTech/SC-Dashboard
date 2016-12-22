@@ -48,16 +48,7 @@ var NavBar = React.createClass({
               <a className="loginLink navbar-brand" onClick={this.teamClick}>TEAM
               </a>
             </div>
-            <div className="btn-group navButton">
-              <button type="button" className="navButton btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img className="userPro navButton" src='./img/userprofilepic.jpg'></img><span className="caret"></span>
-              </button>
-              <ul className="dropdown-menu">
-                <li><a href="#">Login</a></li>
-                <li><a href="#">Sign Up</a></li>
-                <li><a href="#">Profile</a></li>
-              </ul>
-            </div>
+            
           </div>
         </nav>
       </div>

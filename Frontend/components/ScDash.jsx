@@ -16,7 +16,8 @@ var React = require('react'),
 var ScDash = React.createClass({
   getInitialState: function() {
     return {user: SessionStore.user(),
-    username: SessionStore.getUsername()};
+    username: SessionStore.getUsername(),
+    followers: SessionStore.getCoordinates()};
   },
   componentDidMount: function() {
     this.sessionStoreListener = SessionStore.addListener(this.onSessionChange);
@@ -26,11 +27,41 @@ var ScDash = React.createClass({
       $('.map').vectorMap({map: 'us_aea'});
     });
   },
-  componentWillUnmount: function() {
-    this.sessionStoreListener.remove();
-  },
   onSessionChange: function() {
-    this.setState({user: SessionStore.user()});
+    this.setState({user: SessionStore.user(),
+    followers: SessionStore.getCoordinates(),
+    username: SessionStore.getUsername()});
+
+    // if (this.state.followers !== null) {
+    //   $('.map').vectorMap({
+    //     map: 'us_aea_en',
+    //     markers: data.metro.coords,
+    //     series: {
+    //       markers: [{
+    //         attribute: 'fill',
+    //         scale: ['#FEE5D9', '#A50F15'],
+    //         values: data.metro.unemployment[val],
+    //         min: jvm.min(metroUnemplValues),
+    //         max: jvm.max(metroUnemplValues)
+    //       },{
+    //         attribute: 'r',
+    //         scale: [5, 20],
+    //         values: data.metro.population[val],
+    //         min: jvm.min(metroPopValues),
+    //         max: jvm.max(metroPopValues)
+    //       }],
+    //       regions: [{
+    //         scale: ['#DEEBF7', '#08519C'],
+    //         attribute: 'fill',
+    //         values: data.states[val],
+    //         min: jvm.min(statesValues),
+    //         max: jvm.max(statesValues)
+    //       }]
+    //     }
+    //     //...
+    //   });
+    // }
+
   },
   render: function(){
     var renderFollowers = [];
